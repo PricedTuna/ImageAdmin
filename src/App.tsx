@@ -6,34 +6,32 @@ import UploadPhoto from "./components/UploadPhoto";
 import ImagesByCategory from "./components/ImagesByCategory";
 
 function App() {
-  const [catSelected, setCatSelected] = useState<Category>({} as Category);
-  const [catToSeePhotos, setCatToSeePhotos] = useState<Category>(
-    {} as Category
-  );
+  const [catSelected, setCatSelected] = useState<Category | null>(null);
+  const [catToSeePhotos, setCatToSeePhotos] = useState<Category | null>(null);
+  const [isAddCatModalVisible, setIsAddCatModalVisible] = useState<boolean>(false)
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 4,
-      }}
-    >
-      <CategoriesForm />
+    <div className="p-8 max-w-3xl mx-auto bg-gray-100 min-h-screen">
+      <h1 className="text-2xl font-bold mb-6">Image Categories App</h1>
       <CategoriesList
-        onSelect={(cat) => setCatSelected(cat)}
-        onRequestPhotos={(cat) => setCatToSeePhotos(cat)}
+        onSelect={setCatSelected}
+        onRequestPhotos={setCatToSeePhotos}
+        onAddCategory={() => setIsAddCatModalVisible(true)}
       />
 
-      {catSelected && catSelected.name && (
-        <div>
-          <h3>Upload photo to selected category</h3>
+      {isAddCatModalVisible && <CategoriesForm />}
+
+      {catSelected && (
+        <div className="mt-6 p-4 bg-white rounded-lg shadow-md">
+          <h3 className="text-lg font-semibold mb-4">
+            Upload photo to "{catSelected.name}"
+          </h3>
           <UploadPhoto category={catSelected} />
         </div>
       )}
 
-      {catToSeePhotos && catToSeePhotos.id && (
-        <div>
+      {catToSeePhotos && (
+        <div className="mt-6">
           <ImagesByCategory category={catToSeePhotos} />
         </div>
       )}

@@ -20,16 +20,18 @@ function CategoriesForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Name:
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-      </label>
-      <label>
-        Color:
-        <input type="text" value={color} onChange={(e) => setColor(e.target.value)} />
-      </label>
-      <button type="submit">Add Category</button>
+    <form onSubmit={handleSubmit} className="bg-white p-4 rounded-lg shadow-md space-y-4">
+      <div>
+        <label className="block font-medium">Name:</label>
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full border rounded-lg p-2"/>
+      </div>
+      <div>
+        <label className="block font-medium">Color:</label>
+        <input type="text" value={color} onChange={(e) => setColor(e.target.value)} className="w-full border rounded-lg p-2"/>
+      </div>
+      <button type="submit" className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600">
+        Add Category
+      </button>
     </form>
   );
 }

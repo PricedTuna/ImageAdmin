@@ -5,9 +5,10 @@ import { Category } from '../interfaces/Category';
 interface Props {
   onSelect: (cat: Category) => void
   onRequestPhotos: (cat: Category) => void
+  onAddCategory: () => void
 }
 
-function CategoriesList({onSelect, onRequestPhotos}: Props) {
+function CategoriesList({onSelect, onRequestPhotos, onAddCategory}: Props) {
   const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
@@ -17,18 +18,17 @@ function CategoriesList({onSelect, onRequestPhotos}: Props) {
   }, []);
 
   return (
-    <div>
-      <h2>Categories</h2>
-      <ul>
+    <div className="bg-white p-4 rounded-lg shadow-md mt-6">
+      <button className="bg-green-500 duration-150 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full cursor-pointer w-full" onClick={onAddCategory}>Agregar categoría</button>
+      <h2 className="text-xl font-bold mb-4">Categories</h2>
+      <ul className="space-y-4">
         {categories.map((category) => (
-          <li key={category.id} style={{ marginBottom: '10px' }}>
-            <strong>{category.name}</strong> - {category.color}
-            <button onClick={() => onSelect(category)} style={{ marginLeft: '10px' }}>
-              Upload Photo
-            </button>
-            <button onClick={() => onRequestPhotos(category)} style={{ marginLeft: '10px' }}>
-              See Photos
-            </button>
+          <li key={category.id} className="flex justify-between items-center border-b pb-2">
+            <span>{category.name} - {category.color}</span>
+            <div className="space-x-2">
+              <button onClick={() => onSelect(category)} className="bg-blue-500 hover:bg-blue-300 duration-150 text-white px-3 py-1 rounded-lg cursor-pointer">Upload Photo</button>
+              <button onClick={() => onRequestPhotos(category)} className="bg-gray-500 hover:bg-gray-300 duration-100 text-white px-3 py-1 rounded-lg cursor-pointer">See Photos</button>
+            </div>
           </li>
         ))}
       </ul>
