@@ -24,9 +24,9 @@ const UploadPhoto = ({ category }: { category: Category }) => {
   };
 
   return (
-    <div className="space-y-4">
-      <input type="file" onChange={handleImageChange} className="block w-full" />
-      <button onClick={handleUpload} className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">
+    <div className="space-y-4 mt-4">
+      <input type="file" onChange={handleImageChange} className="block w-full bg-gray-200 hover:bg-gray-300 transition-100 cursor-pointer rounded p-2" />
+      <button onClick={handleUpload} className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 cursor-pointer">
         Upload to {category.name}
       </button>
     </div>

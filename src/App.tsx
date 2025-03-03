@@ -23,9 +23,12 @@ function App() {
 
       {catSelected && (
         <div className="mt-6 p-4 bg-white rounded-lg shadow-md">
+          <div className="flex align-items-center justify-between">
           <h3 className="text-lg font-semibold mb-4">
             Upload photo to "{catSelected.name}"
           </h3>
+          <button className="bg-red-500 text-white py-1 px-2 rounded-lg hover:bg-red-600 cursor-pointer" onClick={() => setCatSelected(null)}>Close</button>
+          </div>
           <UploadPhoto category={catSelected} />
         </div>
       )}
