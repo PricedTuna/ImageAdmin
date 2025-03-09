@@ -2,13 +2,18 @@ import { useEffect, useState } from "react";
 import SectionView from "./SectionView";
 import { getAllSections } from "../service/section.service";
 import { Section } from "../interfaces/Section";
-import SectionForm from "./Section";
+import { useNavigate } from "react-router-dom";
+import CenterComponent from "./microComponents/CenterComponent";
+import Button from "./microComponents/Button";
+import Text from "./microComponents/Text";
+import SectionList from "./sections/SectionList";
 
-function SectionsList() {
+function Sections() {
     const [sections, setSections] = useState<Section[]>([])
     const [sectionSelected, setSectionSelected] = useState<Section | null>(null)
+
+    const navigate = useNavigate();
   
-    const [isSectionFormOpen, setIsSectionFormOpen] = useState(false)
   
     const handleFetchSections = async () => {
       const sections = await getAllSections()
@@ -20,28 +25,18 @@ function SectionsList() {
     }, [])
 
   return (
-    <div>
-      <h1>Sections!</h1>
-      <button onClick={() => setIsSectionFormOpen(prev => !prev)}>Agregar section</button>
-
-      {isSectionFormOpen && (
-        <SectionForm />
-      )}
+    <CenterComponent>
+      <Text as="h1" size="4xl">Sections!</Text>
+      <Button variant="success" width={"full"} onClick={() => navigate('/create-section')}>Agregar section</Button>
       
-      <ul>
-        {
-          sections.map((section) => (
-            <li onClick={() => setSectionSelected(section)}>{section.id} - {section.title}</li>
-          ))
-        }
-      </ul>
+      <SectionList sections={sections} />
 
       {sectionSelected && (
         <SectionView section={sectionSelected} />
       ) }
 
-    </div>
+    </CenterComponent>
   )
 }
 
-export default SectionsList
+export default Sections
