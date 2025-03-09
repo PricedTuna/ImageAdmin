@@ -20,7 +20,7 @@ export async function createAlbum(album: Album): Promise<void> {
 /**
  * Obtiene un álbum a partir de su id.
  */
-export async function getAlbum(id: string): Promise<Album | null> {
+export async function   getAlbum(id: string): Promise<Album | null> {
   const albumDocRef = doc(albumsCollection, id);
   const docSnap = await getDoc(albumDocRef);
   return docSnap.exists() ? (docSnap.data() as Album) : null;

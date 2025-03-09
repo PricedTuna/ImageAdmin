@@ -1,7 +1,7 @@
 // Section.tsx
 
 import React, { useState } from 'react';
-import { updateSection } from '../service/section.service';
+import { createSection, updateSection } from '../service/section.service';
 import { ParentPageEnum } from '../interfaces/enums/ParentPage.enum';
 import { SectionStructureEnum } from '../interfaces/enums/SectionStructure.enum';
 
@@ -32,6 +32,25 @@ const Section: React.FC = () => {
       alert('Error al actualizar la sección.');
     }
   };
+
+  // Crear una sección nueva
+  const handleCreateSection = async () => {
+    try {
+      const createData = {
+        title,
+        text,
+        order,
+        parentPage,
+        albumId,
+        structureType,
+      };
+
+      await createSection(createData)
+    } catch (error) {
+      console.error("error al crear una sección: ", error)
+      alert('Error al crear la sección')
+    }
+  }
 
   return (
     <div className="max-w-md mx-auto p-4 bg-white shadow rounded mt-4">
@@ -113,8 +132,14 @@ const Section: React.FC = () => {
       </div>
       
       <button 
+        onClick={handleCreateSection} 
+        className="w-full bg-green-500 text-white p-2 rounded mt-4 cursor-pointer"
+      >
+        Crear Sección
+      </button>
+      <button 
         onClick={handleUpdateSection} 
-        className="w-full bg-blue-500 text-white p-2 rounded mt-4"
+        className="w-full bg-blue-500 text-white p-2 rounded mt-4 cursor-pointer"
       >
         Actualizar Sección
       </button>
