@@ -1,6 +1,6 @@
 import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from 'firebase/firestore';
 import { app } from '../config/firebase.config';
-import { Album } from '../interfaces/Album';
+import { IAlbum } from '../interfaces/Album';
 import { Image } from '../interfaces/Image';
 
 const db = getFirestore(app);
@@ -11,7 +11,7 @@ const albumsCollection = collection(db, 'albums');
  * Crea un nuevo álbum en la base de datos.
  * Si no se pasa un id, se genera uno automáticamente.
  */
-export async function createAlbum(album: Album): Promise<void> {
+export async function createAlbum(album: IAlbum): Promise<void> {
   const albumDoc = doc(albumsCollection);
   album.id = album.id || albumDoc.id;
   await setDoc(albumDoc, album);
@@ -20,20 +20,20 @@ export async function createAlbum(album: Album): Promise<void> {
 /**
  * Obtiene un álbum a partir de su id.
  */
-export async function getAlbum(id: string): Promise<Album | null> {
+export async function getAlbum(id: string): Promise<IAlbum | null> {
   const albumDocRef = doc(albumsCollection, id);
   const docSnap = await getDoc(albumDocRef);
-  return docSnap.exists() ? (docSnap.data() as Album) : null;
+  return docSnap.exists() ? (docSnap.data() as IAlbum) : null;
 }
 
 /**
  * Obtiene todos los álbums
  */
-export async function getAllAlbums(): Promise<Album[]> {
+export async function getAllAlbums(): Promise<IAlbum[]> {
   const querySnapshot = await getDocs(albumsCollection);
-  const albums: Album[] = [];
+  const albums: IAlbum[] = [];
   querySnapshot.forEach(doc => {
-    albums.push(doc.data() as Album);
+    albums.push(doc.data() as IAlbum);
   });
   return albums;
 }
@@ -80,7 +80,7 @@ export async function removeImageFromAlbum(albumId: string, image: Image): Promi
  * @param albumId - El ID del álbum.
  * @param albumData - Un objeto con los campos a actualizar (parcial de Album).
  */
-export async function updateAlbum(albumId: string, albumData: Partial<Album>): Promise<void> {
+export async function updateAlbum(albumId: string, albumData: Partial<IAlbum>): Promise<void> {
   const albumRef = doc(db, 'albums', albumId);
   await updateDoc(albumRef, albumData);
 }

@@ -1,5 +1,3 @@
-// Section.tsx
-
 import { useEffect, useState } from "react";
 import {
   createSection,
@@ -26,8 +24,6 @@ const Section = () => {
 
     setIsFetching(true);
     const section = await getSection(sectionParamId);
-    console.log("section");
-    console.log(JSON.stringify(section));
     setSection(section);
     setIsFetching(false);
   };

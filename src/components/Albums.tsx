@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Album } from "../interfaces/Album";
+import { IAlbum } from "../interfaces/Album";
 import { getAllAlbums } from "../service/album.service";
 import AlbumsList from "./AlbumsList";
 import Spinner from "./Spinner";
@@ -8,11 +8,11 @@ import Button from "./microComponents/Button";
 import { useNavigate } from "react-router-dom";
 
 interface Props {
-  handleClick: (album: Album) => void;
+  handleClick: (album: IAlbum) => void;
 }
 
 function Albums({ handleClick }: Props) {
-  const [albums, setAlbums] = useState<Album[]>([]);
+  const [albums, setAlbums] = useState<IAlbum[]>([]);
   const [isFetching, setisFetching] = useState(false)
 
   const navigate = useNavigate()

@@ -1,8 +1,8 @@
 import React from "react";
-import { Album } from "../interfaces/Album";
+import { IAlbum } from "../interfaces/Album";
 
 interface AlbumViewProps {
-  album: Album;
+  album: IAlbum;
 }
 
 const AlbumView: React.FC<AlbumViewProps> = ({ album }) => {

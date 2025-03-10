@@ -1,9 +1,8 @@
-import { Album } from "../interfaces/Album";
-import Text from "./microComponents/Text";
+import { IAlbum } from "../interfaces/Album";
 
 interface Props {
-  albums: Album[];
-  handleClick: (album: Album) => void;
+  albums: IAlbum[];
+  handleClick: (album: IAlbum) => void;
 }
 
 function AlbumsList({ handleClick, albums }: Props) {
@@ -14,7 +13,7 @@ function AlbumsList({ handleClick, albums }: Props) {
         {albums.map((album) => (
           <li
             key={album.id}
-            className="bg-white shadow-lg rounded-lg p-4 border border-gray-200"
+            className="bg-white shadow-lg rounded-lg p-4 border border-gray-200 cursor-pointer transition-all duration-300 hover:scale-102 hover:bg-gray-300"
             onClick={() => handleClick(album)}
           >
             <h3 className="text-lg font-semibold">{album.name}</h3>

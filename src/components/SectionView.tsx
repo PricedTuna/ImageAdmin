@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ISection } from "../interfaces/Section";
-import { Album } from "../interfaces/Album";
+import { IAlbum } from "../interfaces/Album";
 import AlbumView from "./AlbumView";
 import { getAlbum } from "../service/album.service";
 
@@ -9,7 +9,7 @@ interface SectionViewProps {
 }
 
 const SectionView: React.FC<SectionViewProps> = ({ section }) => {
-  const [album, setAlbum] = useState<Album | null>(null);
+  const [album, setAlbum] = useState<IAlbum | null>(null);
 
   useEffect(() => {
     if (!section.albumId) return;
