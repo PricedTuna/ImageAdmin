@@ -1,18 +1,64 @@
 // Section.tsx
 
-import React, { useState } from 'react';
-import { createSection, updateSection } from '../service/section.service';
-import { ParentPageEnum } from '../interfaces/enums/ParentPage.enum';
-import { SectionStructureEnum } from '../interfaces/enums/SectionStructure.enum';
+import { useEffect, useState } from "react";
+import {
+  createSection,
+  getSection,
+  updateSection,
+} from "../service/section.service";
+import { ParentPageEnum } from "../interfaces/enums/ParentPage.enum";
+import { SectionStructureEnum } from "../interfaces/enums/SectionStructure.enum";
+import { ISection } from "../interfaces/Section";
+import { useParams } from "react-router-dom";
+import Spinner from "./Spinner";
+import CenterComponent from "./microComponents/CenterComponent";
+import Button from "./microComponents/Button";
+import Text from "./microComponents/Text";
+import FormPropWrapper from "./microComponents/FormPropWrapper";
 
-const Section: React.FC = () => {
-  const [sectionId, setSectionId] = useState('');
-  const [title, setTitle] = useState('');
-  const [text, setText] = useState('');
-  const [order, setOrder] = useState(0);
-  const [parentPage, setParentPage] = useState<ParentPageEnum>(ParentPageEnum.HOME);
-  const [albumId, setAlbumId] = useState('');
-  const [structureType, setStructureType] = useState<SectionStructureEnum>(SectionStructureEnum.CAROUSEL);
+const Section = () => {
+  const [section, setSection] = useState<ISection | null>(null);
+  const [isFetching, setIsFetching] = useState(false);
+  const { sectionId: sectionParamId } = useParams();
+
+  const fetchSection = async () => {
+    if (!sectionParamId) return;
+
+    setIsFetching(true);
+    const section = await getSection(sectionParamId);
+    console.log("section");
+    console.log(JSON.stringify(section));
+    setSection(section);
+    setIsFetching(false);
+  };
+
+  useEffect(() => {
+    fetchSection();
+  }, [sectionParamId]);
+
+  const [sectionId, setSectionId] = useState(section?.id ?? "");
+  const [title, setTitle] = useState(section?.title ?? "");
+  const [text, setText] = useState(section?.text ?? "");
+  const [order, setOrder] = useState(section?.order ?? 0);
+  const [parentPage, setParentPage] = useState<ParentPageEnum>(
+    section?.parentPage ?? ParentPageEnum.HOME
+  );
+  const [albumId, setAlbumId] = useState(section?.albumId ?? "");
+  const [structureType, setStructureType] = useState<SectionStructureEnum>(
+    section?.structureType ?? SectionStructureEnum.CAROUSEL
+  );
+
+  useEffect(() => {
+    if (!section) return;
+
+    setSectionId(section.id ?? "");
+    setTitle(section.title);
+    setText(section.text);
+    setOrder(section.order);
+    setParentPage(section.parentPage);
+    setAlbumId(section.albumId);
+    setStructureType(section.structureType);
+  }, [section]);
 
   // Actualiza cualquier campo de la sección
   const handleUpdateSection = async () => {
@@ -26,10 +72,10 @@ const Section: React.FC = () => {
         structureType,
       };
       await updateSection(sectionId, updateData);
-      alert('¡Sección actualizada!');
+      alert("¡Sección actualizada!");
     } catch (error) {
-      console.error('Error al actualizar sección:', error);
-      alert('Error al actualizar la sección.');
+      console.error("Error al actualizar sección:", error);
+      alert("Error al actualizar la sección.");
     }
   };
 
@@ -45,104 +91,84 @@ const Section: React.FC = () => {
         structureType,
       };
 
-      await createSection(createData)
+      await createSection(createData);
     } catch (error) {
-      console.error("error al crear una sección: ", error)
-      alert('Error al crear la sección')
+      console.error("error al crear una sección: ", error);
+      alert("Error al crear la sección");
     }
+  };
+
+  if (isFetching) {
+    return <Spinner />;
   }
 
   return (
-    <div className="max-w-md mx-auto p-4 bg-white shadow rounded mt-4">
-      <h2 className="text-xl font-bold mb-4">Prueba de Sección</h2>
-      
-      <div className="mb-2">
-        <label className="block text-sm font-medium mb-1">Section ID:</label>
-        <input 
-          type="text" 
-          className="w-full p-2 border rounded" 
-          value={sectionId} 
-          onChange={(e) => setSectionId(e.target.value)} 
-        />
+    <div className="flex flex-col h-screen p-4 bg-white shadow rounded">
+      <div className="flex justify-between">
+        <FormPropWrapper>
+          <Text as="label" className="block text-sm font-medium mb-1 whitespace-nowrap">
+            Título:
+          </Text>
+          <input
+            type="text"
+            className="w-full border rounded p-2"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </FormPropWrapper>
+
+        <FormPropWrapper>
+          <Text as="label"className="block text-sm font-medium mb-1 whitespace-nowrap">Texto:</Text>
+          <input
+            className="w-full border rounded p-2"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          />
+        </FormPropWrapper>
+
+        <FormPropWrapper>
+          <Text as="label"className="block text-sm font-medium mb-1 whitespace-nowrap">Album ID:</Text>
+          <input
+            type="text"
+            className="w-full border rounded p-2"
+            value={albumId}
+            onChange={(e) => setAlbumId(e.target.value)}
+          />
+        </FormPropWrapper>
+
+        <FormPropWrapper>
+          <Text as="label"className="block text-sm font-medium mb-1 whitespace-nowrap">
+            Structure Type:
+          </Text>
+          <select
+            className="w-full border rounded p-2"
+            value={structureType}
+            onChange={(e) =>
+              setStructureType(e.target.value as SectionStructureEnum)
+            }
+          >
+            <option value={SectionStructureEnum.CAROUSEL}>CAROUSEL</option>
+            <option value={SectionStructureEnum.DIVIDED}>DIVIDED</option>
+            <option value={SectionStructureEnum.FULL_SCREEN}>
+              FULL_SCREEN
+            </option>
+          </select>
+        </FormPropWrapper>
       </div>
       
-      <div className="mb-2">
-        <label className="block text-sm font-medium mb-1">Título:</label>
-        <input 
-          type="text" 
-          className="w-full p-2 border rounded" 
-          value={title} 
-          onChange={(e) => setTitle(e.target.value)} 
-        />
+      <div className="flex-1 py-6">
+        <CenterComponent className="p-2 mx-auto bg-gray-200 w-full h-full border-1">hola!</CenterComponent>
       </div>
-      
-      <div className="mb-2">
-        <label className="block text-sm font-medium mb-1">Texto:</label>
-        <textarea 
-          className="w-full p-2 border rounded" 
-          value={text} 
-          onChange={(e) => setText(e.target.value)}
-        />
+
+      <div>
+        {section?.id ? (
+          <Button onClick={handleUpdateSection} width={"full"}>
+            Actualizar Sección
+          </Button>
+        ) : (
+          <Button onClick={handleCreateSection}>Crear Sección</Button>
+        )}
       </div>
-      
-      <div className="mb-2">
-        <label className="block text-sm font-medium mb-1">Orden:</label>
-        <input 
-          type="number" 
-          className="w-full p-2 border rounded" 
-          value={order} 
-          onChange={(e) => setOrder(parseInt(e.target.value))}
-        />
-      </div>
-      
-      <div className="mb-2">
-        <label className="block text-sm font-medium mb-1">Parent Page:</label>
-        <select 
-          className="w-full p-2 border rounded" 
-          value={parentPage} 
-          onChange={(e) => setParentPage(e.target.value as ParentPageEnum)}
-        >
-          <option value={ParentPageEnum.HOME}>HOME</option>
-          <option value={ParentPageEnum.DESCRIPTION}>DESCRIPTION</option>
-          <option value={ParentPageEnum.ABOUT_ME}>ABOUT_ME</option>
-        </select>
-      </div>
-      
-      <div className="mb-2">
-        <label className="block text-sm font-medium mb-1">Album ID:</label>
-        <input 
-          type="text" 
-          className="w-full p-2 border rounded" 
-          value={albumId} 
-          onChange={(e) => setAlbumId(e.target.value)} 
-        />
-      </div>
-      
-      <div className="mb-2">
-        <label className="block text-sm font-medium mb-1">Structure Type:</label>
-        <select 
-          className="w-full p-2 border rounded" 
-          value={structureType} 
-          onChange={(e) => setStructureType(e.target.value as SectionStructureEnum)}
-        >
-          <option value={SectionStructureEnum.CAROUSEL}>CAROUSEL</option>
-          <option value={SectionStructureEnum.DIVIDED}>DIVIDED</option>
-          <option value={SectionStructureEnum.FULL_SCREEN}>FULL_SCREEN</option>
-        </select>
-      </div>
-      
-      <button 
-        onClick={handleCreateSection} 
-        className="w-full bg-green-500 text-white p-2 rounded mt-4 cursor-pointer"
-      >
-        Crear Sección
-      </button>
-      <button 
-        onClick={handleUpdateSection} 
-        className="w-full bg-blue-500 text-white p-2 rounded mt-4 cursor-pointer"
-      >
-        Actualizar Sección
-      </button>
     </div>
   );
 };

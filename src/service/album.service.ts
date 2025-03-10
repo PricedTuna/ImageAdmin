@@ -1,4 +1,4 @@
-import { arrayRemove, arrayUnion, collection, doc, getDoc, getFirestore, setDoc, updateDoc } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from 'firebase/firestore';
 import { app } from '../config/firebase.config';
 import { Album } from '../interfaces/Album';
 import { Image } from '../interfaces/Image';
@@ -20,10 +20,22 @@ export async function createAlbum(album: Album): Promise<void> {
 /**
  * Obtiene un álbum a partir de su id.
  */
-export async function   getAlbum(id: string): Promise<Album | null> {
+export async function getAlbum(id: string): Promise<Album | null> {
   const albumDocRef = doc(albumsCollection, id);
   const docSnap = await getDoc(albumDocRef);
   return docSnap.exists() ? (docSnap.data() as Album) : null;
+}
+
+/**
+ * Obtiene todos los álbums
+ */
+export async function getAllAlbums(): Promise<Album[]> {
+  const querySnapshot = await getDocs(albumsCollection);
+  const albums: Album[] = [];
+  querySnapshot.forEach(doc => {
+    albums.push(doc.data() as Album);
+  });
+  return albums;
 }
 
 /**

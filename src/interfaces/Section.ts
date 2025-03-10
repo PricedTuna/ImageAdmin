@@ -1,7 +1,7 @@
 import { ParentPageEnum } from "./enums/ParentPage.enum";
 import { SectionStructureEnum } from "./enums/SectionStructure.enum";
 
-export interface Section {
+export interface ISection {
   id?: string; 
   title: string;
   text: string;

@@ -1,8 +1,12 @@
 import { PropsWithChildren } from 'react'
 
-function CenterComponent({children}: PropsWithChildren) {
+interface Props extends PropsWithChildren {
+  className?: string
+}
+
+function CenterComponent({children, className}: Props) {
   return (
-    <div className="flex flex-col align-center justify-center">
+    <div className={`flex flex-col items-center justify-center ${className}`}>
       {children}
     </div>
   )

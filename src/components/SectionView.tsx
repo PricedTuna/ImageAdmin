@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Section } from "../interfaces/Section";
+import { ISection } from "../interfaces/Section";
 import { Album } from "../interfaces/Album";
 import AlbumView from "./AlbumView";
 import { getAlbum } from "../service/album.service";
 
 interface SectionViewProps {
-  section: Section;
+  section: ISection;
 }
 
 const SectionView: React.FC<SectionViewProps> = ({ section }) => {

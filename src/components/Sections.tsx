@@ -1,23 +1,24 @@
 import { useEffect, useState } from "react";
-import SectionView from "./SectionView";
 import { getAllSections } from "../service/section.service";
-import { Section } from "../interfaces/Section";
-import { useNavigate } from "react-router-dom";
-import CenterComponent from "./microComponents/CenterComponent";
-import Button from "./microComponents/Button";
-import Text from "./microComponents/Text";
-import SectionList from "./sections/SectionList";
+import { ISection } from "../interfaces/Section";
+import SectionsList from "./sections/SectionsList";
+import Spinner from "./Spinner";
 
-function Sections() {
-    const [sections, setSections] = useState<Section[]>([])
-    const [sectionSelected, setSectionSelected] = useState<Section | null>(null)
+interface Props {
+  handleClick: (section: ISection) => void;
+}
 
-    const navigate = useNavigate();
-  
+function Sections({handleClick}: Props) {
+    const [sections, setSections] = useState<ISection[]>([])
+    const [isFetching, setisFetching] = useState(false)
   
     const handleFetchSections = async () => {
+      setisFetching(true)
+
       const sections = await getAllSections()
       setSections(sections)
+
+      setisFetching(false)
     }
   
     useEffect(() => {
@@ -25,17 +26,14 @@ function Sections() {
     }, [])
 
   return (
-    <CenterComponent>
-      <Text as="h1" size="4xl">Sections!</Text>
-      <Button variant="success" width={"full"} onClick={() => navigate('/create-section')}>Agregar section</Button>
-      
-      <SectionList sections={sections} />
-
-      {sectionSelected && (
-        <SectionView section={sectionSelected} />
-      ) }
-
-    </CenterComponent>
+    <>
+    {
+      isFetching
+        ? <Spinner />
+        : <SectionsList sections={sections} handleClick={handleClick} />
+    }
+    </>
+    
   )
 }
 

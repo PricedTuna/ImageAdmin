@@ -7,6 +7,7 @@ interface ButtonProps {
   onClick?: () => void;
   disabled?: boolean;
   children: React.ReactNode;
+  className?: string;
 }
 
 const variantClasses = {
@@ -31,13 +32,14 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   disabled = false,
   children,
+  className,
 }) => {
   const widthClass =
     width === "full" ? "w-full" : width === "auto" ? "w-auto" : `w-[${width}px]`;
 
   return (
     <button
-      className={`rounded transition duration-200 cursor-pointer ${variantClasses[variant]} ${sizeClasses[size]} ${widthClass} ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
+      className={`rounded transition duration-200 cursor-pointer ${variantClasses[variant]} ${sizeClasses[size]} ${widthClass} ${disabled ? "opacity-50 cursor-not-allowed" : ""} ${className}`}
       onClick={onClick}
       disabled={disabled}
     >

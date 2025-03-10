@@ -1,7 +1,7 @@
 import React from "react";
 
 interface TextProps {
-  as?: "p" | "span" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "div";
+  as?: "p" | "span" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "div" | "label";
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl";
   children: React.ReactNode;
   className?: string;
