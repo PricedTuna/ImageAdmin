@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  createSection,
-  getSection,
-  updateSection,
-} from "../service/section.service";
+import { createSection, getSection, updateSection } from "../service/section.service";
 import { ParentPageEnum } from "../interfaces/enums/ParentPage.enum";
 import { SectionStructureEnum } from "../interfaces/enums/SectionStructure.enum";
 import { ISection } from "../interfaces/Section";
@@ -20,7 +16,19 @@ const Section = () => {
   const { sectionId: sectionParamId } = useParams();
 
   const fetchSection = async () => {
-    if (!sectionParamId) return;
+    if (!sectionParamId) {
+      setSection(null);
+
+      setSectionId("");
+      setTitle("");
+      setText("");
+      setOrder(0);
+      setParentPage(ParentPageEnum.HOME);
+      setAlbumId("");
+      setStructureType(SectionStructureEnum.CAROUSEL);
+
+      return;
+    }
 
     setIsFetching(true);
     const section = await getSection(sectionParamId);
@@ -65,7 +73,7 @@ const Section = () => {
         order,
         parentPage,
         albumId,
-        structureType,
+        structureType
       };
       await updateSection(sectionId, updateData);
       alert("¡Sección actualizada!");
@@ -84,7 +92,7 @@ const Section = () => {
         order,
         parentPage,
         albumId,
-        structureType,
+        structureType
       };
 
       await createSection(createData);
@@ -95,7 +103,7 @@ const Section = () => {
   };
 
   if (isFetching) {
-    return <Spinner />;
+    return <Spinner/>;
   }
 
   return (
@@ -114,7 +122,7 @@ const Section = () => {
         </FormPropWrapper>
 
         <FormPropWrapper>
-          <Text as="label"className="block text-sm font-medium mb-1 whitespace-nowrap">Texto:</Text>
+          <Text as="label" className="block text-sm font-medium mb-1 whitespace-nowrap">Texto:</Text>
           <input
             className="w-full border rounded p-2"
             value={text}
@@ -123,7 +131,7 @@ const Section = () => {
         </FormPropWrapper>
 
         <FormPropWrapper>
-          <Text as="label"className="block text-sm font-medium mb-1 whitespace-nowrap">Album ID:</Text>
+          <Text as="label" className="block text-sm font-medium mb-1 whitespace-nowrap">Album ID:</Text>
           <input
             type="text"
             className="w-full border rounded p-2"
@@ -133,7 +141,7 @@ const Section = () => {
         </FormPropWrapper>
 
         <FormPropWrapper>
-          <Text as="label"className="block text-sm font-medium mb-1 whitespace-nowrap">
+          <Text as="label" className="block text-sm font-medium mb-1 whitespace-nowrap">
             Structure Type:
           </Text>
           <select
@@ -151,18 +159,20 @@ const Section = () => {
           </select>
         </FormPropWrapper>
       </div>
-      
+
       <div className="flex-1 py-6">
         <CenterComponent className="p-2 mx-auto bg-gray-200 w-full h-full border-1">hola!</CenterComponent>
       </div>
 
       <div>
         {section?.id ? (
-          <Button onClick={handleUpdateSection} width={"full"}>
+          <Button onClick={handleUpdateSection} width={"full"} variant={"success"}>
             Actualizar Sección
           </Button>
         ) : (
-          <Button onClick={handleCreateSection}>Crear Sección</Button>
+          <Button onClick={handleCreateSection} width={"full"} variant={"success"}>
+            Crear Sección
+          </Button>
         )}
       </div>
     </div>

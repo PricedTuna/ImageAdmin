@@ -1,7 +1,6 @@
 import { Route, Routes, useNavigate } from "react-router-dom";
 import Sections from "./components/Sections";
 import Section from "./components/Section";
-import Home from "./pages/Home";
 import MainLayout from "./layout/MainLayout";
 import Albums from "./components/Albums";
 import Album from "./components/Album";
@@ -13,9 +12,9 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<MainLayout />}>
-        <Route index element={<Home />} />
+        <Route index element={<Sections handleClick={(section) => navigate(`/sections/${section.id}`)} />} />
 
-        <Route path="sections" element={<Sections handleClick={() => {}} />} />
+        <Route path="sections" element={<Sections handleClick={(section) => navigate(`/sections/${section.id}`)} />} />
         <Route path="sections/:sectionId" element={<Section />} />
         <Route path="create-section" element={<Section />} />
         <Route path="albums" element={<Albums handleClick={(album) => {navigate(`albums/${album.id}`)}} />} />

@@ -5,6 +5,7 @@ interface TextProps {
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl";
   children: React.ReactNode;
   className?: string;
+  onClick?: () => void;
 }
 
 const sizeClasses = {
@@ -23,8 +24,9 @@ const Text: React.FC<TextProps> = ({
   size = "md",
   children,
   className = "",
+  onClick = () => {}
 }) => {
-  return <Component className={`${sizeClasses[size]} ${className}`}>{children}</Component>;
+  return <Component onClick={onClick} className={`${sizeClasses[size]} ${className}`}>{children}</Component>;
 };
 
 export default Text;

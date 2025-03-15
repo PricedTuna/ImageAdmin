@@ -1,24 +1,25 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../components/microComponents/Button";
 import Text from "../components/microComponents/Text";
-import { ParentPageEnum } from "../interfaces/enums/ParentPage.enum.ts";
+import { getParentPageName, ParentPageEnum } from "../interfaces/enums/ParentPage.enum.ts";
 import { ISection } from "../interfaces/Section.ts";
 import { getAllSections } from "../service/section.service.ts";
 import { useEffect, useState } from "react";
+import SectionsList from "./sections/SectionsList.tsx";
 
 export interface SectionsByParentPage {
   [key: string]: ISection[];
 }
 
 function Sidebar() {
-  const [sectionsByParent, setSectionsByParent] = useState< Record<ParentPageEnum, ISection[]> | null >(null)
-  const [isFetching, setIsFetching] = useState(false)
+  const [sectionsByParent, setSectionsByParent] = useState<Record<ParentPageEnum, ISection[]> | null>(null);
+  const [isFetching, setIsFetching] = useState(false);
   const navigate = useNavigate();
 
   const handleFetchSections = async () => {
-    setIsFetching(true)
+    setIsFetching(true);
 
-    const sections = await getAllSections()
+    const sections = await getAllSections();
 
     // Agrupación usando reduce
     const groupedByParentPage = sections.reduce((acc, section) => {
@@ -31,39 +32,33 @@ function Sidebar() {
       return acc;
     }, {} as Record<ParentPageEnum, ISection[]>);
 
-    setSectionsByParent(groupedByParentPage)
+    setSectionsByParent(groupedByParentPage);
 
-    setIsFetching(false)
-  }
+    setIsFetching(false);
+  };
 
   useEffect(() => {
-    handleFetchSections()
-  }, [])
+    handleFetchSections();
+  }, []);
 
-  if(isFetching) return (<></>)
+  if (isFetching) return (<></>);
   return (
     <div className="w-64 bg-gray-100 shadow h-screen p-4 flex flex-col border-r-3 border-l-0 border-gray-400">
-      <Text as="h1" size="3xl">
-        Mi Aplicación
+      <Text as="h1" size="3xl" onClick={() => navigate("/")} className="cursor-pointer">
+        Websiter
       </Text>
       <Button className="mt-2" onClick={() => navigate("/albums")}>
         Albums
       </Button>
-      <nav className="flex-1">
-
-          {sectionsByParent && Object.entries(sectionsByParent).map(([parentPage, sections]) => (
-            <div key={parentPage}>
-              <h2>{parentPage}</h2>
-              {sections.map((section) => (
-                // Usamos section.id o, si no existe, una combinación única como section.title
-                <h1>{section.title}</h1>
-              ))}
+      <nav className="flex-1 py-8 overflow-y-auto">
+        {sectionsByParent && Object.entries(sectionsByParent).map(([parentPage, sections]) => (
+          <div key={parentPage}>
+            <div className="max-w-4xl mx-auto text-center p-2 mt-2 bg-gray-300 rounded-lg">
+              <h3 className="text-lg font-semibold">{getParentPageName(parentPage as ParentPageEnum)}</h3>
             </div>
-          ))}
-
-        {/*<Sections*/}
-        {/*  handleClick={(section) => navigate(`/sections/${section.id}`)}*/}
-        {/*/>*/}
+            <SectionsList sections={sections} handleClick={(section) => navigate(`/sections/${section.id}`)}/>
+          </div>
+        ))}
       </nav>
       <Button className="mt-2" onClick={() => navigate("/create-section")}>
         Crear sección
