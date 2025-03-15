@@ -23,6 +23,10 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+      // Configuramos la regla para permitir interfaces vacías en las interfaces
+      '@typescript-eslint/no-empty-interface': ['error', { allowInterfaces: true }],
+      // Y si te da lata el patrón de desestructuración vacío, lo desactivamos:
+      'no-empty-pattern': 'off',
     },
   },
 )

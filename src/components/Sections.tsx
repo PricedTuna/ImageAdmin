@@ -10,17 +10,17 @@ interface Props {
 
 function Sections({handleClick}: Props) {
     const [sections, setSections] = useState<ISection[]>([])
-    const [isFetching, setisFetching] = useState(false)
-  
+    const [isFetching, setIsFetching] = useState(false)
+
     const handleFetchSections = async () => {
-      setisFetching(true)
+      setIsFetching(true)
 
       const sections = await getAllSections()
       setSections(sections)
 
-      setisFetching(false)
+      setIsFetching(false)
     }
-  
+
     useEffect(() => {
       handleFetchSections()
     }, [])
@@ -33,7 +33,7 @@ function Sections({handleClick}: Props) {
         : <SectionsList sections={sections} handleClick={handleClick} />
     }
     </>
-    
+
   )
 }
 
