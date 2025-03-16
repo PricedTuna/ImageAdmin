@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { IAlbum } from "../interfaces/Album";
-import { getAllAlbums } from "../service/album.service";
+import { IAlbum } from "../../interfaces/Album";
+import { getAllAlbums } from "../../service/album.service";
 import AlbumsList from "./AlbumsList";
-import Spinner from "./Spinner";
-import Text from "./microComponents/Text";
-import Button from "./microComponents/Button";
+import Spinner from "../Spinner";
+import Text from "../microComponents/Text";
+import Button from "../microComponents/Button";
 import { useNavigate } from "react-router-dom";
 
 interface Props {

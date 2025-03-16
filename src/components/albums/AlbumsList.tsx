@@ -1,4 +1,4 @@
-import { IAlbum } from "../interfaces/Album";
+import { IAlbum } from "../../interfaces/Album";
 
 interface Props {
   albums: IAlbum[];

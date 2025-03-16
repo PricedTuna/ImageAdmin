@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { IAlbum } from "../interfaces/Album";
-import { Image } from "../interfaces/Image";
+import { IAlbum } from "../../interfaces/Album";
+import { Image } from "../../interfaces/Image";
 import {
   addImageToAlbum,
   createAlbum,
   getAlbum,
   removeImageFromAlbum,
   updateAlbumTitle,
-} from "../service/album.service";
-import Text from "./microComponents/Text";
+} from "../../service/album.service";
+import Text from "../microComponents/Text";
 
 const Album: React.FC = () => {
   const [album, setAlbum] = useState<IAlbum | null>(null);

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { ISection } from "../interfaces/Section";
-import { IAlbum } from "../interfaces/Album";
-import AlbumView from "./AlbumView";
-import { getAlbum } from "../service/album.service";
+import { ISection } from "../../interfaces/Section";
+import { IAlbum } from "../../interfaces/Album";
+import AlbumView from "../albums/AlbumView";
+import { getAlbum } from "../../service/album.service";
 
 interface SectionViewProps {
   section: ISection;

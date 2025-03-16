@@ -1,5 +1,5 @@
 import React from "react";
-import { IAlbum } from "../interfaces/Album";
+import { IAlbum } from "../../interfaces/Album";
 
 interface AlbumViewProps {
   album: IAlbum;

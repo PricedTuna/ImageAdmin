@@ -1,8 +1,8 @@
-import useGetSections from "../hooks/sections/useGetSections.ts";
-import { ISection } from "../interfaces/Section";
-import Text from "./microComponents/Text.tsx";
-import SectionsList from "./sections/SectionsList";
-import Spinner from "./Spinner";
+import useGetSections from "../../hooks/sections/useGetSections.ts";
+import { ISection } from "../../interfaces/Section";
+import Text from "../microComponents/Text.tsx";
+import Spinner from "../Spinner.tsx";
+import SectionsList from "./sectionList/SectionsList.tsx";
 
 interface Props {
   handleClick: (section: ISection) => void;

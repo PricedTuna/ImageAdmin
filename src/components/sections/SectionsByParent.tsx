@@ -1,7 +1,7 @@
 import { ParentPageEnum } from '../../interfaces/enums/ParentPage.enum';
 import { useOrderSections } from "../../hooks/useOrderSections.ts";
 import { getParentPageName } from "../../interfaces/enums/ParentPage.enum.ts";
-import SectionsList from "../sections/SectionsList.tsx";
+import SectionsList from "./sectionList/SectionsList.tsx";
 import { useNavigate } from 'react-router-dom';
 import { useGetSectionsByParentPage } from '../../hooks/sections/useGetSectionsByParentPage.ts';
 

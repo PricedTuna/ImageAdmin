@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { createSection, getSection, updateSection } from "../service/section.service";
-import { ParentPageEnum } from "../interfaces/enums/ParentPage.enum";
-import { SectionStructureEnum } from "../interfaces/enums/SectionStructure.enum";
-import { ISection } from "../interfaces/Section";
+import { createSection, getSection, updateSection } from "../../service/section.service";
+import { ParentPageEnum } from "../../interfaces/enums/ParentPage.enum";
+import { SectionStructureEnum } from "../../interfaces/enums/SectionStructure.enum";
+import { ISection } from "../../interfaces/Section";
 import { useParams } from "react-router-dom";
-import Spinner from "./Spinner";
-import CenterComponent from "./microComponents/CenterComponent";
-import Button from "./microComponents/Button";
-import Text from "./microComponents/Text";
-import FormPropWrapper from "./microComponents/FormPropWrapper";
+import Spinner from "../Spinner";
+import CenterComponent from "../microComponents/CenterComponent";
+import Button from "../microComponents/Button";
+import Text from "../microComponents/Text";
+import FormPropWrapper from "../microComponents/FormPropWrapper";
 
 const Section = () => {
   const [section, setSection] = useState<ISection | null>(null);

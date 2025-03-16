@@ -5,9 +5,9 @@ import {
   verticalListSortingStrategy
 } from '@dnd-kit/sortable';
 import { useState } from 'react';
-import { ISection } from "../../interfaces/Section";
+import { ISection } from "../../../interfaces/Section";
 import SortableSection from './SectionListElement';
-import { updateSection } from '../../service/section.service';
+import { updateSection } from '../../../service/section.service';
 
 interface Props {
   sections: ISection[];

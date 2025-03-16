@@ -1,8 +1,8 @@
 import { Route, Routes, useNavigate } from "react-router-dom";
 import Section from "./components/Section";
 import MainLayout from "./layout/MainLayout";
-import Albums from "./components/Albums";
-import Album from "./components/Album";
+import Albums from "./components/albums/Albums";
+import Album from "./components/albums/Album";
 import SectionsByParent from "./components/sections/SectionsByParent";
 
 function App() {
