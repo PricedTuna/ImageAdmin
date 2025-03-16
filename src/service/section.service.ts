@@ -46,5 +46,5 @@ export async function getAllSections(): Promise<ISection[]> {
  */
 export async function updateSection(sectionId: string, sectionData: Partial<ISection>): Promise<void> {
   const sectionRef = doc(db, 'sections', sectionId);
-  await updateDoc(sectionRef, sectionData);
+  await updateDoc(sectionRef, sectionData); 
 }

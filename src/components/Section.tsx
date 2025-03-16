@@ -15,18 +15,43 @@ const Section = () => {
   const [isFetching, setIsFetching] = useState(false);
   const { sectionId: sectionParamId } = useParams();
 
+  const [sectionId, setSectionId] = useState(section?.id ?? "");
+  const [title, setTitle] = useState(section?.title ?? "");
+  const [text, setText] = useState(section?.text ?? "");
+  const [order, setOrder] = useState(section?.order ?? 0);
+  const [parentPage, setParentPage] = useState<ParentPageEnum>(
+    section?.parentPage ?? ParentPageEnum.HOME
+  );
+  const [albumId, setAlbumId] = useState(section?.albumId ?? "");
+  const [structureType, setStructureType] = useState<SectionStructureEnum>(
+    section?.structureType ?? SectionStructureEnum.CAROUSEL
+  );
+
+  const resetValues = () => {
+    setSection(null);
+
+    setSectionId("");
+    setTitle("");
+    setText("");
+    setOrder(0);
+    setParentPage(ParentPageEnum.HOME);
+    setAlbumId("");
+    setStructureType(SectionStructureEnum.CAROUSEL);
+  }
+
+  const setValues = (section: ISection) => {
+    setSectionId(section.id ?? "");
+    setTitle(section.title);
+    setText(section.text);
+    setOrder(section.order);
+    setParentPage(section.parentPage);
+    setAlbumId(section.albumId);
+    setStructureType(section.structureType);
+  }
+
   const fetchSection = async () => {
     if (!sectionParamId) {
-      setSection(null);
-
-      setSectionId("");
-      setTitle("");
-      setText("");
-      setOrder(0);
-      setParentPage(ParentPageEnum.HOME);
-      setAlbumId("");
-      setStructureType(SectionStructureEnum.CAROUSEL);
-
+      resetValues()
       return;
     }
 
@@ -40,28 +65,11 @@ const Section = () => {
     fetchSection();
   }, [sectionParamId]);
 
-  const [sectionId, setSectionId] = useState(section?.id ?? "");
-  const [title, setTitle] = useState(section?.title ?? "");
-  const [text, setText] = useState(section?.text ?? "");
-  const [order, setOrder] = useState(section?.order ?? 0);
-  const [parentPage, setParentPage] = useState<ParentPageEnum>(
-    section?.parentPage ?? ParentPageEnum.HOME
-  );
-  const [albumId, setAlbumId] = useState(section?.albumId ?? "");
-  const [structureType, setStructureType] = useState<SectionStructureEnum>(
-    section?.structureType ?? SectionStructureEnum.CAROUSEL
-  );
-
   useEffect(() => {
     if (!section) return;
 
-    setSectionId(section.id ?? "");
-    setTitle(section.title);
-    setText(section.text);
-    setOrder(section.order);
-    setParentPage(section.parentPage);
-    setAlbumId(section.albumId);
-    setStructureType(section.structureType);
+    setValues(section)
+
   }, [section]);
 
   // Actualiza cualquier campo de la sección
@@ -108,7 +116,7 @@ const Section = () => {
 
   return (
     <div className="flex flex-col h-screen p-4 bg-white shadow rounded">
-      <div className="flex justify-between">
+      <div className="flex flex-col lg:flex-row justify-between">
         <FormPropWrapper>
           <Text as="label" className="block text-sm font-medium mb-1 whitespace-nowrap">
             Título:
