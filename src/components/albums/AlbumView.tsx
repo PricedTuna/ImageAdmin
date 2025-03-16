@@ -5,7 +5,7 @@ interface AlbumViewProps {
   album: IAlbum;
 }
 
-const AlbumView: React.FC<AlbumViewProps> = ({ album }) => {
+const AlbumView = ({ album }: AlbumViewProps) => {
   return (
     <div className="flex flex-col space-y-4 p-4 bg-white shadow-md rounded-md">
       <h2 className="text-xl font-bold">{album.name}</h2>

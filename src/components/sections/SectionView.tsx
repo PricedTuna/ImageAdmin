@@ -8,7 +8,7 @@ interface SectionViewProps {
   section: ISection;
 }
 
-const SectionView: React.FC<SectionViewProps> = ({ section }) => {
+const SectionView = ({ section }: SectionViewProps) => {
   const [album, setAlbum] = useState<IAlbum | null>(null);
 
   useEffect(() => {

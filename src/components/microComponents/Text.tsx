@@ -19,13 +19,13 @@ const sizeClasses = {
   "4xl": "text-4xl",
 };
 
-const Text: React.FC<TextProps> = ({
+const Text = ({
   as: Component = "p",
   size = "md",
   children,
   className = "",
   onClick = () => {}
-}) => {
+}: TextProps) => {
   return <Component onClick={onClick} className={`${sizeClasses[size]} ${className}`}>{children}</Component>;
 };
 

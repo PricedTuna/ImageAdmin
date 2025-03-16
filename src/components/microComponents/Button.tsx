@@ -25,7 +25,7 @@ const sizeClasses = {
   lg: "px-6 py-3 text-lg",
 };
 
-const Button: React.FC<ButtonProps> = ({
+const Button = ({
   variant = "primary",
   size = "md",
   width = "auto",
@@ -33,7 +33,7 @@ const Button: React.FC<ButtonProps> = ({
   disabled = false,
   children,
   className,
-}) => {
+}: ButtonProps) => {
   const widthClass =
     width === "full" ? "w-full" : width === "auto" ? "w-auto" : `w-[${width}px]`;
 
