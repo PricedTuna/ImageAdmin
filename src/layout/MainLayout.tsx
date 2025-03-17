@@ -4,9 +4,7 @@ import Sidebar from "../components/Sidebar";
 const MainLayout = () => {
   return (
     <div className="min-h-screen flex">
-      {/*<div className={"h-screen overflow-hidden"}>*/}
-        <Sidebar />
-      {/*</div>*/}
+      <Sidebar />
       <main className="flex-1 max-h-screen overflow-auto">
         <Outlet />
       </main>

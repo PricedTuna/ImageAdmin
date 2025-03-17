@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, getFirestore, onSnapshot, setDoc, updateDoc } from 'firebase/firestore';
 import { app } from '../config/firebase.config';
 import { ISection } from '../interfaces/Section';
 
@@ -21,22 +21,30 @@ export async function createSection(section: ISection): Promise<ISection> {
 /**
  * Obtiene una sección a partir de su id.
  */
-export async function getSection(id: string): Promise<ISection | null> {
+export function listenSection(id: string, callback: (section: ISection | null) => void) {
   const sectionDocRef = doc(sectionsCollection, id);
-  const docSnap = await getDoc(sectionDocRef);
-  return docSnap.exists() ? (docSnap.data() as ISection) : null;
+  const unsubscribe = onSnapshot(sectionDocRef, (docSnap) => {
+    if (docSnap.exists()) {
+      callback(docSnap.data() as ISection);
+    } else {
+      callback(null);
+    }
+  });
+  return unsubscribe; // Invoca esta función para cancelar la suscripción cuando ya no la necesites
 }
 
 /**
- * (Opcional) Obtiene todas las secciones de la base de datos.
+ * Obtiene todas las secciones de la base de datos.
  */
-export async function getAllSections(): Promise<ISection[]> {
-  const querySnapshot = await getDocs(sectionsCollection);
-  const sections: ISection[] = [];
-  querySnapshot.forEach(doc => {
-    sections.push(doc.data() as ISection);
+export function listenAllSections(callback: (sections: ISection[]) => void) {
+  const unsubscribe = onSnapshot(sectionsCollection, (querySnapshot) => {
+    const sections: ISection[] = [];
+    querySnapshot.forEach((doc) => {
+      sections.push(doc.data() as ISection);
+    });
+    callback(sections);
   });
-  return sections;
+  return unsubscribe; // Llama a esta función para cancelar la escucha cuando ya no lo necesites
 }
 
 /**

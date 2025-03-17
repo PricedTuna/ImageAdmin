@@ -1,24 +1,22 @@
 import { useEffect, useState } from 'react';
 import { ISection } from '../../interfaces/Section';
-import { getAllSections } from '../../service/section.service';
+import { listenAllSections } from '../../service/section.service';
 import { useOrderSections } from '../useOrderSections';
 
 function useGetSections() {
   const [sections, setSections] = useState<ISection[]>([])
   const [isFetching, setIsFetching] = useState(false)
 
-  const handleFetchSections = async () => {
+  useEffect(() => {
     setIsFetching(true)
 
-    const sections = await getAllSections()
-    
-    setIsFetching(false)
-    
-    return sections
-  }
+    const unsubscribe = listenAllSections((sections) => {
+      setSections(useOrderSections(sections))
+    });
 
-  useEffect(() => {
-    handleFetchSections().then(sections => setSections(useOrderSections(sections)))
+    setIsFetching(false)
+
+    return () => unsubscribe();
   }, [])
 
 

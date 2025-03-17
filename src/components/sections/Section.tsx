@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createSection, getSection, updateSection } from "../../service/section.service";
+import { createSection, listenSection, updateSection } from "../../service/section.service";
 import { getParentPageName, ParentPageEnum, parentPageList } from "../../interfaces/enums/ParentPage.enum";
 import {
   getSectionStructureName,
@@ -65,18 +65,6 @@ const Section = () => {
     setStructureType(section.structureType);
   };
 
-  const fetchSection = async () => {
-    if (!sectionParamId) {
-      resetValues();
-      return;
-    }
-
-    setIsFetching(true);
-    const section = await getSection(sectionParamId);
-    setSection(section);
-    setIsFetching(false);
-  };
-
   const fetchAlbums = async () => {
     setIsFetching(true);
     const albums = await getAllAlbums();
@@ -85,7 +73,20 @@ const Section = () => {
   };
 
   useEffect(() => {
-    fetchSection();
+    if (!sectionParamId) {
+      resetValues();
+      return;
+    }
+
+    setIsFetching(true);
+
+    const unsubscribe = listenSection(sectionParamId, (sectionData) => {
+      setSection(sectionData);
+    });
+
+    setIsFetching(false);
+
+    return () => unsubscribe();
   }, [sectionParamId]);
 
   useEffect(() => {

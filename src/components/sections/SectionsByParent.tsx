@@ -4,6 +4,7 @@ import { getParentPageName } from "../../interfaces/enums/ParentPage.enum.ts";
 import SectionsList from "./sectionList/SectionsList.tsx";
 import { useNavigate } from 'react-router-dom';
 import { useGetSectionsByParentPage } from '../../hooks/sections/useGetSectionsByParentPage.ts';
+import { useEffect } from "react";
 
 interface Props {
   scaleOnHover?: boolean
@@ -13,6 +14,11 @@ interface Props {
 function SectionsByParent({ scaleOnHover = true, isDraggable = true }: Props) {
   const {isFetching, sectionsByParent} = useGetSectionsByParentPage();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("desde el componente")
+    console.log(sectionsByParent)
+  }, [sectionsByParent])
 
   if(isFetching) return (<></>)
   return (

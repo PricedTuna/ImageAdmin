@@ -4,7 +4,7 @@ import {
   SortableContext,
   verticalListSortingStrategy
 } from '@dnd-kit/sortable';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ISection } from "../../../interfaces/Section";
 import SortableSection from './SectionListElement';
 import { updateSection } from '../../../service/section.service';
@@ -29,6 +29,10 @@ export default function SectionsList({
       updateSection(section.id ?? "", { order: index })
     })
   }
+
+  useEffect(() => {
+    setOrderedSections(sections)
+  }, [sections])
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
