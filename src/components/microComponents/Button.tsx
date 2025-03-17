@@ -10,6 +10,7 @@ interface ButtonProps {
   className?: string;
   icon?: JSX.Element;
   iconPosition?: "left" | "right";
+  truncate?: boolean;
 }
 
 const variantClasses = {
@@ -37,6 +38,7 @@ const Button = ({
   className,
   icon,
   iconPosition = "left",
+  truncate = false
 }: ButtonProps) => {
   const widthClass =
     width === "full" ? "w-full" : width === "auto" ? "w-auto" : `w-[${width}px]`;
@@ -47,7 +49,7 @@ const Button = ({
       onClick={onClick}
       disabled={disabled}
     >
-      {icon && iconPosition === "left" && icon} {children} {icon && iconPosition === "right" && icon}
+      <div>{icon && iconPosition === "left" && icon}</div> <span className={truncate ? "truncate" : ""}>{children}</span> <div>{icon && iconPosition === "right" && icon}</div>
     </button>
   );
 };

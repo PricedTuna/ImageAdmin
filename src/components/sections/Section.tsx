@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { createSection, getSection, updateSection } from "../../service/section.service";
-import { ParentPageEnum } from "../../interfaces/enums/ParentPage.enum";
-import { SectionStructureEnum } from "../../interfaces/enums/SectionStructure.enum";
+import { getParentPageName, ParentPageEnum, parentPageList } from "../../interfaces/enums/ParentPage.enum";
+import {
+  getSectionStructureName,
+  SectionStructureEnum,
+  sectionStructureList
+} from "../../interfaces/enums/SectionStructure.enum";
 import { ISection } from "../../interfaces/Section";
 import { useParams } from "react-router-dom";
 import Spinner from "../Spinner";
@@ -13,10 +17,10 @@ import { useSwalAlert } from "../../hooks/useSwalAlert.ts";
 import { IAlbum } from "../../interfaces/Album.ts";
 import { getAllAlbums } from "../../service/album.service.ts";
 import { FaPlus } from "react-icons/fa";
-import { MdModeEditOutline } from "react-icons/md";
+import { MdModeEditOutline, MdOpenInNew } from "react-icons/md";
 
 const Section = () => {
-  const alert = useSwalAlert()
+  const alert = useSwalAlert();
 
   const [section, setSection] = useState<ISection | null>(null);
   const [albums, setAlbums] = useState<IAlbum[] | null>(null);
@@ -35,6 +39,9 @@ const Section = () => {
     section?.structureType ?? SectionStructureEnum.CAROUSEL
   );
 
+  const [isTitleModalOpen, setIsTitleModalOpen] = useState(false);
+  const [isTextModalOpen, setIsTextModalOpen] = useState(false);
+
   const resetValues = () => {
     setSection(null);
 
@@ -45,7 +52,7 @@ const Section = () => {
     setParentPage(ParentPageEnum.HOME);
     setAlbumId("");
     setStructureType(SectionStructureEnum.CAROUSEL);
-  }
+  };
 
   const setValues = (section: ISection) => {
     setSectionId(section.id ?? "");
@@ -55,11 +62,11 @@ const Section = () => {
     setParentPage(section.parentPage);
     setAlbumId(section.albumId);
     setStructureType(section.structureType);
-  }
+  };
 
   const fetchSection = async () => {
     if (!sectionParamId) {
-      resetValues()
+      resetValues();
       return;
     }
 
@@ -74,27 +81,27 @@ const Section = () => {
     const albums = await getAllAlbums();
     setAlbums(albums);
     setIsFetching(false);
-  }
+  };
 
   useEffect(() => {
     fetchSection();
   }, [sectionParamId]);
 
   useEffect(() => {
-    fetchAlbums()
+    fetchAlbums();
   }, []);
 
   useEffect(() => {
     if (!section) return;
 
-    setValues(section)
+    setValues(section);
 
   }, [section]);
 
   // Actualiza cualquier campo de la sección
   const handleUpdateSection = async () => {
     try {
-      if( !await alert.confirm("¿Desea actualizar la sección?") ) return;
+      if (!await alert.confirm("¿Desea actualizar la sección?")) return;
 
       const updateData = {
         title,
@@ -115,7 +122,7 @@ const Section = () => {
   // Crear una sección nueva
   const handleCreateSection = async () => {
     try {
-      if( !await alert.confirm("¿Desea crear la sección?") ) return;
+      if (!await alert.confirm("¿Desea crear la sección?")) return;
 
       const createData = {
         title,
@@ -145,22 +152,81 @@ const Section = () => {
           <Text as="label" className="block text-sm font-medium mb-1 whitespace-nowrap">
             Título:
           </Text>
-          <input
-            type="text"
-            className="w-full border rounded p-2"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+          <Button
+            icon={<MdOpenInNew/>}
+            width={"full"}
+            onClick={() => setIsTitleModalOpen(true)}
+            variant={"light"}
+            className={"max-w-xs"}
+            truncate
+          >
+            {title}
+          </Button>
         </FormPropWrapper>
+
+        {isTitleModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            {/* Fondo oscuro para el modal */}
+            <div
+              className="absolute inset-0 bg-gray-800 opacity-50"
+              onClick={() => setIsTitleModalOpen(false)}
+            ></div>
+            {/* Contenido del modal */}
+            <div className="bg-white p-6 rounded shadow-lg z-10 w-full max-w-lg h-full max-h-min">
+              <h2 className="text-xl font-bold mb-4">Editar Título</h2>
+              <Text as="label" className="block text-sm font-medium mb-1">
+                Título:
+              </Text>
+              <textarea
+                className="w-full border rounded p-2"
+                onChange={(e) => setTitle(e.target.value)}
+                rows={4}
+                cols={50}
+              >
+                {title}
+              </textarea>
+            </div>
+          </div>
+        )}
 
         <FormPropWrapper>
           <Text as="label" className="block text-sm font-medium mb-1 whitespace-nowrap">Texto:</Text>
-          <input
-            className="w-full border rounded p-2"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
+          <Button
+            icon={<MdOpenInNew/>}
+            width={"full"}
+            onClick={() => setIsTextModalOpen(true)}
+            variant={"light"}
+            className={"max-w-xs"}
+            truncate
+          >
+            {text}
+          </Button>
         </FormPropWrapper>
+
+        {isTextModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            {/* Fondo oscuro para el modal */}
+            <div
+              className="absolute inset-0 bg-gray-800 opacity-50"
+              onClick={() => setIsTextModalOpen(false)}
+            ></div>
+            {/* Contenido del modal */}
+            <div className="bg-white p-6 rounded shadow-lg z-10 w-full max-w-lg h-full max-h-min">
+              <h2 className="text-xl font-bold mb-4">Editar Título</h2>
+              <Text as="label" className="block text-sm font-medium mb-1">
+                Texto:
+              </Text>
+              <textarea
+                className="w-full border rounded p-2"
+                onChange={(e) => setText(e.target.value)}
+                rows={4}
+                cols={50}
+              >
+                {text}
+              </textarea>
+            </div>
+          </div>
+        )}
 
         <FormPropWrapper>
           <Text as="label" className="block text-sm font-medium mb-1 whitespace-nowrap">Album:</Text>
@@ -179,7 +245,7 @@ const Section = () => {
 
         <FormPropWrapper>
           <Text as="label" className="block text-sm font-medium mb-1 whitespace-nowrap">
-            Structure Type:
+            Tipo:
           </Text>
           <select
             className="w-full border rounded p-2"
@@ -188,11 +254,30 @@ const Section = () => {
               setStructureType(e.target.value as SectionStructureEnum)
             }
           >
-            <option value={SectionStructureEnum.CAROUSEL}>CAROUSEL</option>
-            <option value={SectionStructureEnum.DIVIDED}>DIVIDED</option>
-            <option value={SectionStructureEnum.FULL_SCREEN}>
-              FULL_SCREEN
-            </option>
+            {
+              sectionStructureList.map((structure, index) => (
+                <option key={index} value={structure}>{getSectionStructureName(structure)}</option>
+              ))
+            }
+          </select>
+        </FormPropWrapper>
+
+        <FormPropWrapper>
+          <Text as="label" className="block text-sm font-medium mb-1 whitespace-nowrap">
+            Página:
+          </Text>
+          <select
+            className="w-full border rounded p-2"
+            value={structureType}
+            onChange={(e) =>
+              setParentPage(e.target.value as ParentPageEnum)
+            }
+          >
+            {
+              parentPageList.map((parentPage, index) => (
+                <option key={index} value={parentPage}>{getParentPageName(parentPage)}</option>
+              ))
+            }
           </select>
         </FormPropWrapper>
       </div>
@@ -203,11 +288,11 @@ const Section = () => {
 
       <div>
         {section?.id ? (
-          <Button icon={<MdModeEditOutline />} onClick={handleUpdateSection} width={"full"} variant={"success"}>
+          <Button icon={<MdModeEditOutline/>} onClick={handleUpdateSection} width={"full"} variant={"success"}>
             Actualizar Sección
           </Button>
         ) : (
-          <Button icon={<FaPlus />} onClick={handleCreateSection} width={"full"} variant={"success"}>
+          <Button icon={<FaPlus/>} onClick={handleCreateSection} width={"full"} variant={"success"}>
             Crear Sección
           </Button>
         )}
