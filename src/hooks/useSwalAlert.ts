@@ -30,7 +30,7 @@ export const useSwalAlert = () => {
         text,
         ...options,
       }),
-    confirm: async (title = '¿Estás seguro?', text = 'Esta acción no se podrá revertir.', options = {}) => {
+    confirm: async (title = '¿Estás seguro?', text = '', options = {}) => {
       const result = await Swal.fire({
         icon: 'question',
         title,

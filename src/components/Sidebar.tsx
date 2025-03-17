@@ -3,6 +3,7 @@ import Button from "../components/microComponents/Button";
 import Text from "../components/microComponents/Text";
 import { ISection } from "../interfaces/Section.ts";
 import SectionsByParent from "./sections/SectionsByParent.tsx";
+import { FaPlus } from "react-icons/fa";
 
 export interface SectionsByParentPage {
   [key: string]: ISection[];
@@ -25,7 +26,7 @@ function Sidebar() {
       <nav className="flex-1 scrollContainer">
         <SectionsByParent scaleOnHover={false} />
       </nav>
-      <Button className="mt-2" onClick={() => navigate("/create-section")}>
+      <Button icon={<FaPlus />} className="mt-2" onClick={() => navigate("/create-section")}>
         Crear sección
       </Button>
     </div>

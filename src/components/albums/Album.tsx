@@ -6,8 +6,8 @@ import Text from "../microComponents/Text";
 import Spinner from "../Spinner.tsx";
 import { useAlbum } from "../../hooks/albums/useAlbum.ts";
 import Button from "../microComponents/Button.tsx";
-import { MdEdit } from "react-icons/md";
-import { CiSquarePlus } from "react-icons/ci";
+import { FaPlus } from "react-icons/fa";
+import { MdModeEditOutline } from "react-icons/md";
 import AlbumImagesList from "./albumImages/AlbumImagesList.tsx";
 
 const Album: React.FC = () => {
@@ -76,17 +76,17 @@ const Album: React.FC = () => {
             <Button
               variant={"success"}
               onClick={() => handleUpdateTitle(albumId, albumName)}
-              icon={<MdEdit/>}
+              icon={<FaPlus />}
               width={"full"}
             >
-              Actualizar album
+              Crear album
             </Button>
           )
           : (
             <Button
               variant={"success"}
               onClick={() => handleCreateAlbum(albumName)}
-              icon={<CiSquarePlus/>}
+              icon={<MdModeEditOutline />}
               width={"full"}
             >
               Actualizar album
@@ -111,7 +111,7 @@ const Album: React.FC = () => {
               />
             </div>
 
-            <Button icon={<CiSquarePlus />} variant={"primary"} onClick={() => handleAddImage(albumId, { src: newImageURL }) } width={"full"}>
+            <Button icon={<FaPlus />} variant={"primary"} onClick={() => handleAddImage(albumId, { src: newImageURL }) } width={"full"}>
               Agregar imagen
             </Button>
           </div>

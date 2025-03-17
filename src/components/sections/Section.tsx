@@ -10,11 +10,16 @@ import Button from "../microComponents/Button";
 import Text from "../microComponents/Text";
 import FormPropWrapper from "../microComponents/FormPropWrapper";
 import { useSwalAlert } from "../../hooks/useSwalAlert.ts";
+import { IAlbum } from "../../interfaces/Album.ts";
+import { getAllAlbums } from "../../service/album.service.ts";
+import { FaPlus } from "react-icons/fa";
+import { MdModeEditOutline } from "react-icons/md";
 
 const Section = () => {
   const alert = useSwalAlert()
 
   const [section, setSection] = useState<ISection | null>(null);
+  const [albums, setAlbums] = useState<IAlbum[] | null>(null);
   const [isFetching, setIsFetching] = useState(false);
   const { sectionId: sectionParamId } = useParams();
 
@@ -64,9 +69,20 @@ const Section = () => {
     setIsFetching(false);
   };
 
+  const fetchAlbums = async () => {
+    setIsFetching(true);
+    const albums = await getAllAlbums();
+    setAlbums(albums);
+    setIsFetching(false);
+  }
+
   useEffect(() => {
     fetchSection();
   }, [sectionParamId]);
+
+  useEffect(() => {
+    fetchAlbums()
+  }, []);
 
   useEffect(() => {
     if (!section) return;
@@ -111,6 +127,7 @@ const Section = () => {
       };
 
       await createSection(createData);
+      alert.success("¡Sección creada!");
     } catch (error) {
       console.error("error al crear una sección: ", error);
       alert.error("Error al crear la sección");
@@ -146,13 +163,18 @@ const Section = () => {
         </FormPropWrapper>
 
         <FormPropWrapper>
-          <Text as="label" className="block text-sm font-medium mb-1 whitespace-nowrap">Album ID:</Text>
-          <input
-            type="text"
+          <Text as="label" className="block text-sm font-medium mb-1 whitespace-nowrap">Album:</Text>
+          <select
             className="w-full border rounded p-2"
             value={albumId}
             onChange={(e) => setAlbumId(e.target.value)}
-          />
+          >
+            {albums && albums.map((album, index) => (
+              <option key={album.id ?? index} value={album.id ?? album.name}>
+                {album.name}
+              </option>
+            ))}
+          </select>
         </FormPropWrapper>
 
         <FormPropWrapper>
@@ -181,11 +203,11 @@ const Section = () => {
 
       <div>
         {section?.id ? (
-          <Button onClick={handleUpdateSection} width={"full"} variant={"success"}>
+          <Button icon={<MdModeEditOutline />} onClick={handleUpdateSection} width={"full"} variant={"success"}>
             Actualizar Sección
           </Button>
         ) : (
-          <Button onClick={handleCreateSection} width={"full"} variant={"success"}>
+          <Button icon={<FaPlus />} onClick={handleCreateSection} width={"full"} variant={"success"}>
             Crear Sección
           </Button>
         )}

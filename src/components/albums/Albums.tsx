@@ -6,6 +6,7 @@ import Spinner from "../Spinner";
 import Text from "../microComponents/Text";
 import Button from "../microComponents/Button";
 import { useNavigate } from "react-router-dom";
+import { FaPlus } from "react-icons/fa";
 
 interface Props {
   handleClick: (album: IAlbum) => void;
@@ -34,7 +35,7 @@ function Albums({ handleClick }: Props) {
     <div className="max-w-4xl mx-auto p-4">
       <div className="flex justify-between">
         <Text as="h1" size="3xl">Álbumes</Text>
-        <Button onClick={() => navigate("/create-album")} variant="success" >Agregar álbum</Button>
+        <Button icon={<FaPlus />} onClick={() => navigate("/create-album")} variant="success" >Agregar álbum</Button>
       </div>
       {
         isFetching
