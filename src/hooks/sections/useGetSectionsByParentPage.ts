@@ -8,7 +8,7 @@ export const useGetSectionsByParentPage = () => {
   const [isFetching, setIsFetching] = useState(false);
 
   const sortSectionsByOrder = (sections: ISection[]) => {
-    const groupedByParentPage = sections.reduce((acc, section) => {
+    return sections.reduce((acc, section) => {
       // Si parentPage no existe o es nulo, podrías asignarle un valor por defecto:
       const parent = section.parentPage;
 
@@ -19,8 +19,6 @@ export const useGetSectionsByParentPage = () => {
       acc[parent].push(section);
       return acc;
     }, {} as Record<string, ISection[]>);
-
-    return groupedByParentPage;
   };
 
   useEffect(() => {
