@@ -1,4 +1,14 @@
-import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from 'firebase/firestore';
+import {
+  arrayRemove,
+  arrayUnion,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  setDoc,
+  updateDoc
+} from 'firebase/firestore';
 import { app } from '../config/firebase.config';
 import { IAlbum } from '../interfaces/Album';
 import { Image } from '../interfaces/Image';
@@ -74,8 +84,7 @@ export async function uploadImageFile(file: File): Promise<string> {
     // Sube el archivo.
     await uploadBytes(storageRef, file);
     // Obtiene la URL de descarga.
-    const downloadURL = await getDownloadURL(storageRef);
-    return downloadURL;
+    return await getDownloadURL(storageRef);
   } catch (error) {
     console.error('Error al subir la imagen:', error);
     throw error;
