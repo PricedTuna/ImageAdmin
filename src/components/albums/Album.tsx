@@ -76,20 +76,20 @@ const Album: React.FC = () => {
             <Button
               variant={"success"}
               onClick={() => handleUpdateTitle(albumId, albumName)}
-              icon={<FaPlus />}
+              icon={<MdModeEditOutline />}
               width={"full"}
             >
-              Crear album
+              Actualizar album
             </Button>
           )
           : (
             <Button
               variant={"success"}
               onClick={() => handleCreateAlbum(albumName)}
-              icon={<MdModeEditOutline />}
+              icon={<FaPlus />}
               width={"full"}
             >
-              Actualizar album
+              Crear album
             </Button>
           )
       }
