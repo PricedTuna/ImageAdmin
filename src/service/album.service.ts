@@ -11,10 +11,11 @@ const albumsCollection = collection(db, 'albums');
  * Crea un nuevo álbum en la base de datos.
  * Si no se pasa un id, se genera uno automáticamente.
  */
-export async function createAlbum(album: IAlbum): Promise<void> {
+export async function createAlbum(album: IAlbum): Promise<IAlbum> {
   const albumDoc = doc(albumsCollection);
   album.id = album.id || albumDoc.id;
   await setDoc(albumDoc, album);
+  return album;
 }
 
 /**

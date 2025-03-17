@@ -7,7 +7,7 @@ import {
   sectionStructureList
 } from "../../interfaces/enums/SectionStructure.enum";
 import { ISection } from "../../interfaces/Section";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../Spinner";
 import CenterComponent from "../microComponents/CenterComponent";
 import Button from "../microComponents/Button";
@@ -21,6 +21,7 @@ import { MdModeEditOutline, MdOpenInNew } from "react-icons/md";
 
 const Section = () => {
   const alert = useSwalAlert();
+  const navigate = useNavigate();
 
   const [section, setSection] = useState<ISection | null>(null);
   const [albums, setAlbums] = useState<IAlbum[] | null>(null);
@@ -122,6 +123,11 @@ const Section = () => {
   // Crear una sección nueva
   const handleCreateSection = async () => {
     try {
+      if(title.length === 0) {
+        alert.error("La sección debe tener titulo")
+        return;
+      }
+
       if (!await alert.confirm("¿Desea crear la sección?")) return;
 
       const createData = {
@@ -133,8 +139,9 @@ const Section = () => {
         structureType
       };
 
-      await createSection(createData);
+      const createdSection = await createSection(createData);
       alert.success("¡Sección creada!");
+      navigate(`/sections/${createdSection.id}`)
     } catch (error) {
       console.error("error al crear una sección: ", error);
       alert.error("Error al crear la sección");
@@ -160,7 +167,7 @@ const Section = () => {
             className={"max-w-xs"}
             truncate
           >
-            {title}
+            {title.length ? title : "título aquí..."}
           </Button>
         </FormPropWrapper>
 
@@ -185,6 +192,7 @@ const Section = () => {
               >
                 {title}
               </textarea>
+              <Button onClick={() => setIsTitleModalOpen(false)} width={"full"} variant={"secondary"}>Cerrar</Button>
             </div>
           </div>
         )}
@@ -199,7 +207,7 @@ const Section = () => {
             className={"max-w-xs"}
             truncate
           >
-            {text}
+            {text.length ? text : "texto aquí..."}
           </Button>
         </FormPropWrapper>
 
@@ -224,6 +232,7 @@ const Section = () => {
               >
                 {text}
               </textarea>
+              <Button onClick={() => setIsTextModalOpen(false)} width={"full"} variant={"secondary"}>Cerrar</Button>
             </div>
           </div>
         )}

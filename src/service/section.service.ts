@@ -11,10 +11,11 @@ const sectionsCollection = collection(db, 'sections');
  * Crea una nueva sección en la base de datos.
  * Se almacena el id del álbum relacionado para mantener la normalización.
  */
-export async function createSection(section: ISection): Promise<void> {
+export async function createSection(section: ISection): Promise<ISection> {
   const sectionDoc = doc(sectionsCollection);
   section.id = section.id || sectionDoc.id;
   await setDoc(sectionDoc, section);
+  return section;
 }
 
 /**
@@ -46,5 +47,5 @@ export async function getAllSections(): Promise<ISection[]> {
  */
 export async function updateSection(sectionId: string, sectionData: Partial<ISection>): Promise<void> {
   const sectionRef = doc(db, 'sections', sectionId);
-  await updateDoc(sectionRef, sectionData); 
+  await updateDoc(sectionRef, sectionData);
 }

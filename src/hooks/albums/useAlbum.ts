@@ -1,18 +1,26 @@
 import { addImageToAlbum, createAlbum, removeImageFromAlbum, updateAlbumTitle } from "../../service/album.service.ts";
 import { Image } from "../../interfaces/Image.ts";
 import { useSwalAlert } from "../useSwalAlert.ts";
+import { useNavigate } from "react-router-dom";
 
 
 export const useAlbum = () => {
   const alert = useSwalAlert()
+  const navigate = useNavigate();
 
   // Función para crear un álbum nuevo
   const handleCreateAlbum = async (albumName: string) => {
     try {
+      if(albumName.length === 0) {
+        alert.error("El album debe tener título");
+        return;
+      }
+
       if( !await alert.confirm("¿Desea crear el album?") ) return;
 
-      await createAlbum({ name: albumName, images: [] });
+      const albumCreated = await createAlbum({ name: albumName, images: [] });
       alert.success("¡Álbum creado correctamente!");
+      navigate(`/albums/${albumCreated.id}`);
     } catch (error) {
       console.error("Error al crear el álbum:", error);
       alert.error("Error al crear el álbum.");
