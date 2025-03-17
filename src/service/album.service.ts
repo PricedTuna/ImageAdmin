@@ -2,10 +2,85 @@ import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, getFirestore
 import { app } from '../config/firebase.config';
 import { IAlbum } from '../interfaces/Album';
 import { Image } from '../interfaces/Image';
+import { deleteObject, getDownloadURL, getStorage, ref, uploadBytes } from "@firebase/storage";
 
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 const albumsCollection = collection(db, 'albums');
+
+/**
+ * Extrae la ruta de almacenamiento del Firebase Storage a partir de la URL de descarga.
+ * @param downloadURL - La URL de descarga proporcionada por Firebase.
+ * @returns La ruta de almacenamiento en formato legible o null si no se pudo extraer.
+ */
+export function getStoragePathFromDownloadURL(downloadURL: string): string | null {
+  try {
+    const url = new URL(downloadURL);
+    // La ruta tiene el formato: /v0/b/tu-app.appspot.com/o/images%2Ffoto.jpg
+    const pathname = url.pathname;
+    const splitPath = pathname.split('/o/');
+    if (splitPath.length < 2) {
+      return null;
+    }
+    // La parte codificada: "images%2Ffoto.jpg"
+    const encodedPath = splitPath[1];
+    // La decodificamos para obtener "images/foto.jpg"
+    return decodeURIComponent(encodedPath);
+  } catch (error) {
+    console.error('Error al extraer la ruta:', error);
+    return null;
+  }
+}
+
+/**
+ * Elimina una imagen del Firebase Storage.
+ * @param imageUrl - Ruta completa de la imagen en el Storage (ejemplo: "images/1632345678900_foto.jpg").
+ */
+export async function deleteImageFile(imageUrl: string): Promise<void> {
+  const imagePath = getStoragePathFromDownloadURL(imageUrl);
+
+  if(!imagePath) {
+    throw new Error('No se proporcionó la ruta de la imagen.');
+  }
+
+  // Crea la referencia a la imagen en Storage.
+  const imageRef = ref(storage, imagePath);
+
+  try {
+    // Elimina la imagen.
+    await deleteObject(imageRef);
+  } catch (error) {
+    console.error('Error eliminando la imagen:', error);
+    throw error;
+  }
+}
+
+/**
+ * Sube una imagen a Firebase Storage y retorna la URL de descarga.
+ * @param file - El archivo (tipo File) seleccionado desde el input.
+ * @returns URL de descarga de la imagen.
+ */
+export async function uploadImageFile(file: File): Promise<string> {
+  if (!file) {
+    throw new Error('No se proporcionó ningún archivo.');
+  }
+
+  // Generamos un nombre único con la fecha y el nombre original.
+  const uniqueFileName = `images/${Date.now()}_${file.name}`;
+  const storageRef = ref(storage, uniqueFileName);
+
+  try {
+    // Sube el archivo.
+    await uploadBytes(storageRef, file);
+    // Obtiene la URL de descarga.
+    const downloadURL = await getDownloadURL(storageRef);
+    return downloadURL;
+  } catch (error) {
+    console.error('Error al subir la imagen:', error);
+    throw error;
+  }
+}
 
 /**
  * Crea un nuevo álbum en la base de datos.

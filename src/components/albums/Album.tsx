@@ -13,13 +13,12 @@ import AlbumImagesList from "./albumImages/AlbumImagesList.tsx";
 const Album: React.FC = () => {
   const [isFetching, setIsFetching] = useState(false);
   const { albumId: albumParamId } = useParams();
-  const { handleUpdateTitle, handleCreateAlbum, handleAddImage } = useAlbum();
+  const { handleUpdateTitle, handleCreateAlbum, handleOnImageInputChange } = useAlbum();
 
   const [album, setAlbum] = useState<IAlbum | null>(null);
 
   const [albumId, setAlbumId] = useState("");
   const [albumName, setAlbumName] = useState("");
-  const [newImageURL, setNewImageURL] = useState("");
 
   const resetValues = () => {
     setAlbum(null);
@@ -102,18 +101,20 @@ const Album: React.FC = () => {
           </Text>
           <div>
             <div className="mb-2">
-              <label className="block text-sm font-medium mb-1">Nueva imagen:</label>
+              <label
+                htmlFor="imageInput"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Nueva imagen:
+              </label>
               <input
-                type="text"
-                className="w-full p-2 border rounded"
-                value={newImageURL}
-                onChange={(e) => setNewImageURL(e.target.value)}
+                id="imageInput"
+                type="file"
+                className="block p-3 w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                onChange={(e) => handleOnImageInputChange(e, albumId)}
               />
             </div>
 
-            <Button icon={<FaPlus />} variant={"primary"} onClick={() => handleAddImage(albumId, { src: newImageURL }) } width={"full"}>
-              Agregar imagen
-            </Button>
           </div>
           <div className={"mt-2"}>
             <AlbumImagesList album={album}/>

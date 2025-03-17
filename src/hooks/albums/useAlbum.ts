@@ -1,4 +1,10 @@
-import { addImageToAlbum, createAlbum, removeImageFromAlbum, updateAlbumTitle } from "../../service/album.service.ts";
+import {
+  addImageToAlbum,
+  createAlbum, deleteImageFile,
+  removeImageFromAlbum,
+  updateAlbumTitle,
+  uploadImageFile
+} from "../../service/album.service.ts";
 import { Image } from "../../interfaces/Image.ts";
 import { useSwalAlert } from "../useSwalAlert.ts";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +13,14 @@ import { useNavigate } from "react-router-dom";
 export const useAlbum = () => {
   const alert = useSwalAlert()
   const navigate = useNavigate();
+
+  const handleOnImageInputChange = async (e: React.ChangeEvent<HTMLInputElement>, albumId: string) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    if (file) {
+      const newImageURL = await uploadImageFile(file);
+      await handleAddImage(albumId, { src: newImageURL })
+    }
+  }
 
   // Función para crear un álbum nuevo
   const handleCreateAlbum = async (albumName: string) => {
@@ -59,6 +73,8 @@ export const useAlbum = () => {
       if( !await alert.confirm("¿Desea eliminar la imagen?") ) return;
 
       await removeImageFromAlbum(albumId, image);
+      await deleteImageFile(image.src);
+
       alert.success("¡Imagen removida!");
     } catch (error) {
       console.error("Error al remover imagen:", error);
@@ -66,5 +82,5 @@ export const useAlbum = () => {
     }
   };
 
-  return { handleCreateAlbum, handleUpdateTitle, handleAddImage, handleRemoveImage }
+  return { handleCreateAlbum, handleUpdateTitle, handleAddImage, handleRemoveImage, handleOnImageInputChange }
 }

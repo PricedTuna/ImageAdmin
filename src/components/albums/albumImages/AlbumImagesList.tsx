@@ -15,7 +15,7 @@ const AlbumImagesList = ({ album }: Props) => {
     <div className="flex gap-2">
       {album.images.length > 0 ? (
         album.images.map((image, index) => (
-          <div className="relative group w-16 h-16">
+          <div key={index} className="relative group w-16 h-16">
             <img
               key={index}
               src={image.src}
