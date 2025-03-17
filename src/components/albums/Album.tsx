@@ -33,6 +33,8 @@ const Album: React.FC = () => {
   };
 
   useEffect(() => {
+    if(!albumParamId) return
+
     setIsFetching(true)
     const unsubscribe = listenAlbum(albumParamId??"", (album) => setAlbum(album));
     setIsFetching(false)
