@@ -78,6 +78,8 @@ const Section = () => {
   // Actualiza cualquier campo de la sección
   const handleUpdateSection = async () => {
     try {
+      if( !await alert.confirm("¿Desea actualizar la sección?") ) return;
+
       const updateData = {
         title,
         text,
@@ -97,6 +99,8 @@ const Section = () => {
   // Crear una sección nueva
   const handleCreateSection = async () => {
     try {
+      if( !await alert.confirm("¿Desea crear la sección?") ) return;
+
       const createData = {
         title,
         text,

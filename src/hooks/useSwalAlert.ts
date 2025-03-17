@@ -30,5 +30,17 @@ export const useSwalAlert = () => {
         text,
         ...options,
       }),
+    confirm: async (title = '¿Estás seguro?', text = 'Esta acción no se podrá revertir.', options = {}) => {
+      const result = await Swal.fire({
+        icon: 'question',
+        title,
+        text,
+        showCancelButton: true,
+        confirmButtonText: 'Confirmar',
+        cancelButtonText: 'Cancelar',
+        ...options,
+      });
+      return result.isConfirmed;
+    },
   };
 };

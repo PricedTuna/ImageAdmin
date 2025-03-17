@@ -9,6 +9,8 @@ export const useAlbum = () => {
   // Función para crear un álbum nuevo
   const handleCreateAlbum = async (albumName: string) => {
     try {
+      if( !await alert.confirm("¿Desea crear el album?") ) return;
+
       await createAlbum({ name: albumName, images: [] });
       alert.success("¡Álbum creado correctamente!");
     } catch (error) {
@@ -20,8 +22,10 @@ export const useAlbum = () => {
   // Actualiza el título del álbum
   const handleUpdateTitle = async (albumId: string, newName: string) => {
     try {
+      if( !await alert.confirm("¿Desea actualizar el album?") ) return;
+
       await updateAlbumTitle(albumId, newName);
-      alert.success("¡Título actualizado!");
+      alert.success("¡Album actualizado!");
     } catch (error) {
       console.error("Error al actualizar título:", error);
       alert.error("Error al actualizar el título.");
@@ -31,6 +35,8 @@ export const useAlbum = () => {
   // Agrega una imagen al álbum
   const handleAddImage = async (albumId: string, image: Image) => {
     try {
+      if( !await alert.confirm("¿Desea agregar la imagen?") ) return;
+
       await addImageToAlbum(albumId, image);
       alert.success("¡Imagen agregada!");
     } catch (error) {
@@ -42,6 +48,8 @@ export const useAlbum = () => {
   // Remueve una imagen del álbum
   const handleRemoveImage = async (albumId: string, image: Image) => {
     try {
+      if( !await alert.confirm("¿Desea eliminar la imagen?") ) return;
+
       await removeImageFromAlbum(albumId, image);
       alert.success("¡Imagen removida!");
     } catch (error) {
