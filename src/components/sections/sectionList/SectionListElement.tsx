@@ -38,7 +38,7 @@ const SortableSection = ({ section, handleClick, scaleOnHover = true, isDraggabl
           )
         }
       </div>
-      <p className="text-gray-700 mt-2">{section.text}</p>
+      <p className="text-gray-700 mt-2 line-clamp-2">{section.text}</p>
       <div className="mt-3 flex justify-between text-sm text-gray-600">
         <span>Tipo: {section.structureType}</span>
       </div>
