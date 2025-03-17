@@ -9,8 +9,11 @@ import CenterComponent from "../microComponents/CenterComponent";
 import Button from "../microComponents/Button";
 import Text from "../microComponents/Text";
 import FormPropWrapper from "../microComponents/FormPropWrapper";
+import { useSwalAlert } from "../../hooks/useSwalAlert.ts";
 
 const Section = () => {
+  const alert = useSwalAlert()
+
   const [section, setSection] = useState<ISection | null>(null);
   const [isFetching, setIsFetching] = useState(false);
   const { sectionId: sectionParamId } = useParams();
@@ -84,10 +87,10 @@ const Section = () => {
         structureType
       };
       await updateSection(sectionId, updateData);
-      alert("¡Sección actualizada!");
+      alert.success("¡Sección actualizada!");
     } catch (error) {
       console.error("Error al actualizar sección:", error);
-      alert("Error al actualizar la sección.");
+      alert.error("Error al actualizar la sección.");
     }
   };
 
@@ -106,7 +109,7 @@ const Section = () => {
       await createSection(createData);
     } catch (error) {
       console.error("error al crear una sección: ", error);
-      alert("Error al crear la sección");
+      alert.error("Error al crear la sección");
     }
   };
 

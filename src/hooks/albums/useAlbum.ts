@@ -1,17 +1,19 @@
 import { addImageToAlbum, createAlbum, removeImageFromAlbum, updateAlbumTitle } from "../../service/album.service.ts";
 import { Image } from "../../interfaces/Image.ts";
+import { useSwalAlert } from "../useSwalAlert.ts";
 
 
 export const useAlbum = () => {
+  const alert = useSwalAlert()
 
   // Función para crear un álbum nuevo
   const handleCreateAlbum = async (albumName: string) => {
     try {
       await createAlbum({ name: albumName, images: [] });
-      alert("¡Álbum creado correctamente!");
+      alert.success("¡Álbum creado correctamente!");
     } catch (error) {
       console.error("Error al crear el álbum:", error);
-      alert("Error al crear el álbum.");
+      alert.error("Error al crear el álbum.");
     }
   };
 
@@ -19,10 +21,10 @@ export const useAlbum = () => {
   const handleUpdateTitle = async (albumId: string, newName: string) => {
     try {
       await updateAlbumTitle(albumId, newName);
-      alert("¡Título actualizado!");
+      alert.success("¡Título actualizado!");
     } catch (error) {
       console.error("Error al actualizar título:", error);
-      alert("Error al actualizar el título.");
+      alert.error("Error al actualizar el título.");
     }
   };
 
@@ -30,10 +32,10 @@ export const useAlbum = () => {
   const handleAddImage = async (albumId: string, image: Image) => {
     try {
       await addImageToAlbum(albumId, image);
-      alert("¡Imagen agregada!");
+      alert.success("¡Imagen agregada!");
     } catch (error) {
       console.error("Error al agregar imagen:", error);
-      alert("Error al agregar la imagen.");
+      alert.error("Error al agregar la imagen.");
     }
   };
 
@@ -41,10 +43,10 @@ export const useAlbum = () => {
   const handleRemoveImage = async (albumId: string, image: Image) => {
     try {
       await removeImageFromAlbum(albumId, image);
-      alert("¡Imagen removida!");
+      alert.success("¡Imagen removida!");
     } catch (error) {
       console.error("Error al remover imagen:", error);
-      alert("Error al remover la imagen.");
+      alert.error("Error al remover la imagen.");
     }
   };
 
