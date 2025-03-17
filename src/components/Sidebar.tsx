@@ -16,11 +16,11 @@ function Sidebar() {
       <Text as="h1" size="3xl" onClick={() => navigate("/")} className="cursor-pointer">
         Websiter
       </Text>
-      <Button className="mt-2" onClick={() => navigate("/albums")}>
-        Albums
+      <Button className="mt-2" onClick={() => navigate("/sections")}>
+        Secciones
       </Button>
       <Button className="mt-2" onClick={() => navigate("/albums")}>
-        Secciones
+        Albums
       </Button>
       <nav className="flex-1 scrollContainer">
         <SectionsByParent scaleOnHover={false} />

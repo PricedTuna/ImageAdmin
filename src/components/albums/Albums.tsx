@@ -13,17 +13,17 @@ interface Props {
 
 function Albums({ handleClick }: Props) {
   const [albums, setAlbums] = useState<IAlbum[]>([]);
-  const [isFetching, setisFetching] = useState(false)
+  const [isFetching, setIsFetching] = useState(false)
 
   const navigate = useNavigate()
 
   const handleFetchSections = async () => {
-    setisFetching(true)
+    setIsFetching(true)
 
     const sections = await getAllAlbums();
     setAlbums(sections);
 
-    setisFetching(false)
+    setIsFetching(false)
   };
 
   useEffect(() => {
@@ -37,7 +37,7 @@ function Albums({ handleClick }: Props) {
         <Button onClick={() => navigate("/create-album")} variant="success" >Agregar álbum</Button>
       </div>
       {
-        isFetching 
+        isFetching
           ? <Spinner />
           : <AlbumsList albums={albums} handleClick={handleClick} />
       }

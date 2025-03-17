@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { JSX } from 'react';
 
 interface ButtonProps {
   variant?: "primary" | "secondary" | "dark" | "light" | "success" | "danger";
@@ -8,6 +8,8 @@ interface ButtonProps {
   disabled?: boolean;
   children: React.ReactNode;
   className?: string;
+  icon?: JSX.Element;
+  iconPosition?: "left" | "right";
 }
 
 const variantClasses = {
@@ -33,17 +35,19 @@ const Button = ({
   disabled = false,
   children,
   className,
+  icon,
+  iconPosition = "left",
 }: ButtonProps) => {
   const widthClass =
     width === "full" ? "w-full" : width === "auto" ? "w-auto" : `w-[${width}px]`;
 
   return (
     <button
-      className={`rounded transition duration-200 cursor-pointer ${variantClasses[variant]} ${sizeClasses[size]} ${widthClass} ${disabled ? "opacity-50 cursor-not-allowed" : ""} ${className}`}
+      className={`rounded transition duration-200 cursor-pointer flex items-center gap-2 ${variantClasses[variant]} ${sizeClasses[size]} ${widthClass} ${disabled ? "opacity-50 cursor-not-allowed" : ""} ${className}`}
       onClick={onClick}
       disabled={disabled}
     >
-      {children}
+      {icon && iconPosition === "left" && icon} {children} {icon && iconPosition === "right" && icon}
     </button>
   );
 };

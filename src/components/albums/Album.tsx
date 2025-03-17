@@ -1,20 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { IAlbum } from "../../interfaces/Album";
-import { Image } from "../../interfaces/Image";
-import {
-  addImageToAlbum,
-  createAlbum,
-  getAlbum,
-  removeImageFromAlbum,
-  updateAlbumTitle,
-} from "../../service/album.service";
+import { getAlbum } from "../../service/album.service";
 import Text from "../microComponents/Text";
+import Spinner from "../Spinner.tsx";
+import { useAlbum } from "../../hooks/albums/useAlbum.ts";
+import Button from "../microComponents/Button.tsx";
+import { MdEdit } from "react-icons/md";
+import { CiSquarePlus } from "react-icons/ci";
+import AlbumImagesList from "./albumImages/AlbumImagesList.tsx";
 
 const Album: React.FC = () => {
-  const [album, setAlbum] = useState<IAlbum | null>(null);
   const [isFetching, setIsFetching] = useState(false);
   const { albumId: albumParamId } = useParams();
+  const { handleUpdateTitle, handleCreateAlbum, handleAddImage } = useAlbum();
+
+  const [album, setAlbum] = useState<IAlbum | null>(null);
+
+  const [albumId, setAlbumId] = useState("");
+  const [albumName, setAlbumName] = useState("");
+  const [newImageURL, setNewImageURL] = useState("");
+
+  const resetValues = () => {
+    setAlbum(null);
+
+    setAlbumId("");
+    setAlbumName("");
+  };
+
+  const setValues = (album: IAlbum) => {
+    setAlbumId(album.id ?? "");
+    setAlbumName(album.name);
+  };
 
   const fetchAlbum = async () => {
     if (!albumParamId) return;
@@ -29,162 +46,80 @@ const Album: React.FC = () => {
     fetchAlbum();
   }, [albumParamId]);
 
-  const [albumId, setAlbumId] = useState("");
-  const [newName, setNewName] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [albumName, setAlbumName] = useState("");
-
   useEffect(() => {
-    if (!album) return;
+    if (!album) {
+      resetValues();
+      return;
+    }
 
-    setAlbumId(album.id ?? "");
-    setNewName(album.name);
-    setAlbumName(album.name);
+    setValues(album);
   }, [album]);
 
-  // Función para crear un álbum nuevo
-  const handleCreateAlbum = async () => {
-    try {
-      await createAlbum({ name: albumName, images: [] });
-      alert("¡Álbum creado correctamente!");
-    } catch (error) {
-      console.error("Error al crear el álbum:", error);
-      alert("Error al crear el álbum.");
-    }
-  };
-
-  // Actualiza el título del álbum
-  const handleUpdateTitle = async () => {
-    try {
-      await updateAlbumTitle(albumId, newName);
-      alert("¡Título actualizado!");
-    } catch (error) {
-      console.error("Error al actualizar título:", error);
-      alert("Error al actualizar el título.");
-    }
-  };
-
-  // Agrega una imagen al álbum
-  const handleAddImage = async () => {
-    try {
-      const image: Image = { src: imageUrl };
-      await addImageToAlbum(albumId, image);
-      alert("¡Imagen agregada!");
-    } catch (error) {
-      console.error("Error al agregar imagen:", error);
-      alert("Error al agregar la imagen.");
-    }
-  };
-
-  // Remueve una imagen del álbum
-  const handleRemoveImage = async () => {
-    try {
-      const image: Image = { src: imageUrl };
-      await removeImageFromAlbum(albumId, image);
-      alert("¡Imagen removida!");
-    } catch (error) {
-      console.error("Error al remover imagen:", error);
-      alert("Error al remover la imagen.");
-    }
-  };
-
+  if (isFetching) return <Spinner/>;
   return (
     <div className="max-w-md mx-auto p-4 bg-white shadow rounded mt-4">
       <h2 className="text-xl font-bold mb-4">Prueba de Álbum</h2>
 
-      {/* Sección para crear un nuevo álbum */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">
-          Nombre del nuevo Álbum:
-        </label>
+      <div className="mb-2">
+        <label className="block text-sm font-medium mb-1">Nuevo Nombre:</label>
         <input
           type="text"
           className="w-full p-2 border rounded"
           value={albumName}
           onChange={(e) => setAlbumName(e.target.value)}
         />
-        <button
-          onClick={handleCreateAlbum}
-          className="w-full bg-purple-500 text-white p-2 rounded mt-2"
-        >
-          Crear Álbum
-        </button>
       </div>
 
-      {/* Sección para actualizar y manipular un álbum existente */}
-      <div className="mb-2">
-        <label className="block text-sm font-medium mb-1">
-          Album ID (para actualizaciones):
-        </label>
-        <input
-          type="text"
-          className="w-full p-2 border rounded"
-          value={albumId}
-          onChange={(e) => setAlbumId(e.target.value)}
-        />
-      </div>
+      {
+        album && album.id
+          ? (
+            <Button
+              variant={"success"}
+              onClick={() => handleUpdateTitle(albumId, albumName)}
+              icon={<MdEdit/>}
+              width={"full"}
+            >
+              Actualizar album
+            </Button>
+          )
+          : (
+            <Button
+              variant={"success"}
+              onClick={() => handleCreateAlbum(albumName)}
+              icon={<CiSquarePlus/>}
+              width={"full"}
+            >
+              Actualizar album
+            </Button>
+          )
+      }
 
-      <div className="mb-2">
-        <label className="block text-sm font-medium mb-1">Nuevo Título:</label>
-        <input
-          type="text"
-          className="w-full p-2 border rounded"
-          value={newName}
-          onChange={(e) => setNewName(e.target.value)}
-        />
-      </div>
-      <button
-        onClick={handleUpdateTitle}
-        className="w-full bg-blue-500 text-white p-2 rounded mb-4"
-      >
-        Actualizar Título
-      </button>
+      {
+        album && album.id &&
+        (<div className={"mt-4"}>
+          <Text as="p" size="lg" className="text-center">
+            Imágenes
+          </Text>
+          <div>
+            <div className="mb-2">
+              <label className="block text-sm font-medium mb-1">Nueva imagen:</label>
+              <input
+                type="text"
+                className="w-full p-2 border rounded"
+                value={newImageURL}
+                onChange={(e) => setNewImageURL(e.target.value)}
+              />
+            </div>
 
-      <div className="mb-2">
-        <label className="block text-sm font-medium mb-1">URL de Imagen:</label>
-        <input
-          type="text"
-          className="w-full p-2 border rounded"
-          value={imageUrl}
-          onChange={(e) => setImageUrl(e.target.value)}
-        />
-      </div>
-      <button
-        onClick={handleAddImage}
-        className="w-full bg-green-500 text-white p-2 rounded mb-2"
-      >
-        Agregar Imagen
-      </button>
-      <button
-        onClick={handleRemoveImage}
-        className="w-full bg-red-500 text-white p-2 rounded"
-      >
-        Remover Imagen
-      </button>
-
-      <div className="mt-3 flex flex-col space-x-2 overflow-x-auto">
-        <Text as="p" size="lg" className="mx-auto">
-          Imágenes
-        </Text>
-        {album ? (
-          <div className="flex gap-2">
-            {album.images.length > 0 ? (
-              album.images.map((image, index) => (
-                <img
-                  key={index}
-                  src={image.src}
-                  alt={`Imagen ${index + 1}`}
-                  className="w-16 h-16 object-cover rounded-lg border border-gray-300"
-                />
-              ))
-            ) : (
-              <p className="text-gray-500 text-sm">Sin imágenes</p>
-            )}
+            <Button icon={<CiSquarePlus />} variant={"primary"} onClick={() => handleAddImage(albumId, { src: newImageURL }) } width={"full"}>
+              Agregar imagen
+            </Button>
           </div>
-        ) : (
-          <p className="text-gray-500 text-sm">Sin imágenes</p>
-        )}
-      </div>
+          <div className={"mt-2"}>
+            <AlbumImagesList album={album}/>
+          </div>
+        </div>)
+      }
     </div>
   );
 };

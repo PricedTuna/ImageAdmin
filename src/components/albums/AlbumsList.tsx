@@ -13,7 +13,7 @@ function AlbumsList({ handleClick, albums }: Props) {
         {albums.map((album) => (
           <li
             key={album.id}
-            className="bg-white shadow-lg rounded-lg p-4 border border-gray-200 cursor-pointer transition-all duration-300 hover:scale-102 hover:bg-gray-300"
+            className="bg-white shadow-lg rounded-lg p-4 border border-gray-200 cursor-pointer transition-all duration-300 hover:scale-105"
             onClick={() => handleClick(album)}
           >
             <h3 className="text-lg font-semibold">{album.name}</h3>
