@@ -56,6 +56,7 @@ const Section = () => {
   };
 
   const setValues = (section: ISection) => {
+    console.log(JSON.stringify(section, null, 2))
     setSectionId(section.id ?? "");
     setTitle(section.title);
     setText(section.text);
@@ -278,7 +279,7 @@ const Section = () => {
           </Text>
           <select
             className="w-full border rounded p-2"
-            value={structureType}
+            value={parentPage}
             onChange={(e) =>
               setParentPage(e.target.value as ParentPageEnum)
             }
