@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { IAlbum } from "../../interfaces/Album";
-import { getAlbum } from "../../service/album.service";
+import { listenAlbum } from "../../service/album.service";
 import Text from "../microComponents/Text";
 import Spinner from "../Spinner.tsx";
 import { useAlbum } from "../../hooks/albums/useAlbum.ts";
@@ -32,17 +32,12 @@ const Album: React.FC = () => {
     setAlbumName(album.name);
   };
 
-  const fetchAlbum = async () => {
-    if (!albumParamId) return;
-
-    setIsFetching(true);
-    const album = await getAlbum(albumParamId);
-    setAlbum(album);
-    setIsFetching(false);
-  };
-
   useEffect(() => {
-    fetchAlbum();
+    setIsFetching(true)
+    const unsubscribe = listenAlbum(albumParamId??"", (album) => setAlbum(album));
+    setIsFetching(false)
+
+    return () => unsubscribe();
   }, [albumParamId]);
 
   useEffect(() => {

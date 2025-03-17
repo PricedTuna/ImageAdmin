@@ -3,9 +3,8 @@ import {
   arrayUnion,
   collection,
   doc,
-  getDoc,
   getDocs,
-  getFirestore,
+  getFirestore, onSnapshot,
   setDoc,
   updateDoc
 } from 'firebase/firestore';
@@ -105,10 +104,16 @@ export async function createAlbum(album: IAlbum): Promise<IAlbum> {
 /**
  * Obtiene un álbum a partir de su id.
  */
-export async function getAlbum(id: string): Promise<IAlbum | null> {
+export function listenAlbum(id: string, callback: (album: IAlbum | null) => void) {
   const albumDocRef = doc(albumsCollection, id);
-  const docSnap = await getDoc(albumDocRef);
-  return docSnap.exists() ? (docSnap.data() as IAlbum) : null;
+  const unsubscribe = onSnapshot(albumDocRef, (docSnap) => {
+    if (docSnap.exists()) {
+      callback(docSnap.data() as IAlbum);
+    } else {
+      callback(null);
+    }
+  });
+  return unsubscribe; // Llama a esta función cuando quieras cancelar la escucha
 }
 
 /**

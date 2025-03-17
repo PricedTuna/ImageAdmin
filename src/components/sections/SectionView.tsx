@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ISection } from "../../interfaces/Section";
 import { IAlbum } from "../../interfaces/Album";
 import AlbumView from "../albums/AlbumView";
-import { getAlbum } from "../../service/album.service";
+import { listenAlbum } from "../../service/album.service";
 
 interface SectionViewProps {
   section: ISection;
@@ -14,7 +14,9 @@ const SectionView = ({ section }: SectionViewProps) => {
   useEffect(() => {
     if (!section.albumId) return;
 
-    getAlbum(section.albumId).then((album) => setAlbum(album));
+    const unsubscribe = listenAlbum(section.albumId, (album) => setAlbum(album));
+
+    return () => unsubscribe();
   }, [section]);
 
   return (
