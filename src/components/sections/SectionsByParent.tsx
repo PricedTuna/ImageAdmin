@@ -16,8 +16,6 @@ function SectionsByParent({ scaleOnHover = true, isDraggable = true }: Props) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("desde el componente")
-    console.log(sectionsByParent)
   }, [sectionsByParent])
 
   if(isFetching) return (<></>)

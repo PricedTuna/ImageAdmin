@@ -8,15 +8,9 @@ export const useGetSectionsByParentPage = () => {
   const [isFetching, setIsFetching] = useState(false);
 
   const sortSectionsByOrder = (sections: ISection[]) => {
-    console.log("1"); // ¡Inicio de sortSectionsByOrder!
-    if (!Array.isArray(sections)) {
-      console.error("sections no es un array:", sections);
-      return {};
-    }
-
     const groupedByParentPage = sections.reduce((acc, section) => {
       // Si parentPage no existe o es nulo, podrías asignarle un valor por defecto:
-      const parent = section.parentPage || 'sin_categoria';
+      const parent = section.parentPage;
 
       if (!acc[parent]) {
         acc[parent] = [];
@@ -25,7 +19,6 @@ export const useGetSectionsByParentPage = () => {
       acc[parent].push(section);
       return acc;
     }, {} as Record<string, ISection[]>);
-    console.log("2"); // ¡Final de sortSectionsByOrder!
 
     return groupedByParentPage;
   };
@@ -35,23 +28,16 @@ export const useGetSectionsByParentPage = () => {
 
     const unsubscribe = listenAllSections((sections) => {
       try {
-        console.log("hubo cambio");
-        console.log("Contenido de sections:", sections);
         const sorted = sortSectionsByOrder(sections);
-        console.log("va a hacer no se qué");
         setSectionsByParent(sorted);
       } catch (e) {
-        console.log("error");
-        console.log(JSON.stringify(e));
+        console.error("Error al ordenar las secciones:", e);
       } finally {
         setIsFetching(false);
       }
     });
 
-    return () => {
-      console.log("se desconecto");
-      unsubscribe()
-    };
+    return () => unsubscribe();
   }, []);
 
   return { isFetching, sectionsByParent };

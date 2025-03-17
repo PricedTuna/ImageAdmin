@@ -56,7 +56,6 @@ const Section = () => {
   };
 
   const setValues = (section: ISection) => {
-    console.log(JSON.stringify(section, null, 2))
     setSectionId(section.id ?? "");
     setTitle(section.title);
     setText(section.text);
