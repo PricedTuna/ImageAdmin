@@ -12,13 +12,15 @@ import { updateSection } from '../../../service/section.service';
 interface Props {
   sections: ISection[];
   handleClick: (section: ISection) => void;
-  scaleOnHover?: boolean
+  scaleOnHover?: boolean;
+  isDraggable?: boolean;
 }
 
 export default function SectionsList({
   sections,
   handleClick,
-  scaleOnHover = true
+  scaleOnHover = true,
+  isDraggable = true
 }: Props) {
   const [orderedSections, setOrderedSections] = useState(sections);
 
@@ -48,7 +50,7 @@ export default function SectionsList({
         <SortableContext items={orderedSections.map((section) => section.id ?? "")} strategy={verticalListSortingStrategy}>
           <ul className="space-y-4">
             {orderedSections.map((section) => (
-              <SortableSection key={section.id} section={section} handleClick={handleClick} scaleOnHover={scaleOnHover} />
+              <SortableSection key={section.id} section={section} handleClick={handleClick} scaleOnHover={scaleOnHover} isDraggable={isDraggable} />
             ))}
           </ul>
         </SortableContext>

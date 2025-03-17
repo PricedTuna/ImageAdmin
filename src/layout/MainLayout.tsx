@@ -1,11 +1,11 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 
-const MainLayout: React.FC = () => {
+const MainLayout = () => {
   return (
     <div className="min-h-screen flex">
       <Sidebar />
-      <main className="flex-1 h-screen">
+      <main className="flex-1 h-screen overflow-auto">
         <Outlet />
       </main>
     </div>

@@ -7,9 +7,10 @@ import { useGetSectionsByParentPage } from '../../hooks/sections/useGetSectionsB
 
 interface Props {
   scaleOnHover?: boolean
+  isDraggable?: boolean
 }
 
-function SectionsByParent({ scaleOnHover = true }: Props) {
+function SectionsByParent({ scaleOnHover = true, isDraggable = true }: Props) {
   const {isFetching, sectionsByParent} = useGetSectionsByParentPage();
   const navigate = useNavigate();
 
@@ -21,7 +22,7 @@ function SectionsByParent({ scaleOnHover = true }: Props) {
           <div className="max-w-4xl mx-auto text-center p-2 my-2 bg-gray-300 rounded-lg">
             <h3 className="text-lg font-semibold">{getParentPageName(parentPage as ParentPageEnum)}</h3>
           </div>
-          <SectionsList sections={useOrderSections(sections)} handleClick={(section) => navigate(`/sections/${section.id}`)} scaleOnHover={scaleOnHover} />
+          <SectionsList sections={useOrderSections(sections)} handleClick={(section) => navigate(`/sections/${section.id}`)} scaleOnHover={scaleOnHover} isDraggable={isDraggable} />
         </div>
       ))}
     </>
