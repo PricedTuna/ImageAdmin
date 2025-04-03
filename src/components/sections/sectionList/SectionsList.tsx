@@ -14,11 +14,13 @@ interface Props {
   handleClick: (section: ISection) => void;
   scaleOnHover?: boolean;
   isDraggable?: boolean;
+  onDelete?: (sectionId: string) => void;
 }
 
 export default function SectionsList({
   sections,
   handleClick,
+  onDelete,
   scaleOnHover = true,
   isDraggable = true
 }: Props) {
@@ -26,13 +28,13 @@ export default function SectionsList({
 
   const updateOrders = (orderedSections: ISection[]) => {
     orderedSections.map((section, index) => {
-      updateSection(section.id ?? "", { order: index })
-    })
-  }
+      updateSection(section.id ?? "", { order: index });
+    });
+  };
 
   useEffect(() => {
-    setOrderedSections(sections)
-  }, [sections])
+    setOrderedSections(sections);
+  }, [sections]);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -51,10 +53,20 @@ export default function SectionsList({
   return (
     <div className="max-w-4xl mx-auto">
       <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext items={orderedSections.map((section) => section.id ?? "")} strategy={verticalListSortingStrategy}>
+        <SortableContext
+          items={orderedSections.map((section) => section.id ?? "")}
+          strategy={verticalListSortingStrategy}
+        >
           <ul className="space-y-4">
             {orderedSections.map((section) => (
-              <SortableSection key={section.id} section={section} handleClick={handleClick} scaleOnHover={scaleOnHover} isDraggable={isDraggable} />
+              <SortableSection
+                key={section.id}
+                section={section}
+                handleClick={handleClick}
+                scaleOnHover={scaleOnHover}
+                isDraggable={isDraggable}
+                onDelete={onDelete}
+              />
             ))}
           </ul>
         </SortableContext>

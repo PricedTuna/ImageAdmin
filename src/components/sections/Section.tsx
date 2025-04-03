@@ -16,12 +16,14 @@ import FormPropWrapper from "../microComponents/FormPropWrapper";
 import { useSwalAlert } from "../../hooks/useSwalAlert.ts";
 import { IAlbum } from "../../interfaces/Album.ts";
 import { getAllAlbums } from "../../service/album.service.ts";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaTrash } from "react-icons/fa";
 import { MdModeEditOutline, MdOpenInNew } from "react-icons/md";
+import { useDeleteSection } from "../../hooks/sections/useDeleteSection.ts";
 
 const Section = () => {
   const alert = useSwalAlert();
   const navigate = useNavigate();
+  const { handleDelete } = useDeleteSection();
 
   const [section, setSection] = useState<ISection | null>(null);
   const [albums, setAlbums] = useState<IAlbum[] | null>(null);
@@ -124,8 +126,8 @@ const Section = () => {
   // Crear una sección nueva
   const handleCreateSection = async () => {
     try {
-      if(title.length === 0) {
-        alert.error("La sección debe tener titulo")
+      if (title.length === 0) {
+        alert.error("La sección debe tener titulo");
         return;
       }
 
@@ -142,7 +144,7 @@ const Section = () => {
 
       const createdSection = await createSection(createData);
       alert.success("¡Sección creada!");
-      navigate(`/sections/${createdSection.id}`)
+      navigate(`/sections/${createdSection.id}`);
     } catch (error) {
       console.error("error al crear una sección: ", error);
       alert.error("Error al crear la sección");
@@ -151,6 +153,10 @@ const Section = () => {
 
   if (isFetching) {
     return <Spinner/>;
+  }
+
+  async function handleDeleteSection() {
+    if(await handleDelete(sectionId)) navigate("/sections")
   }
 
   return (
@@ -298,9 +304,14 @@ const Section = () => {
 
       <div>
         {section?.id ? (
-          <Button icon={<MdModeEditOutline/>} onClick={handleUpdateSection} width={"full"} variant={"success"}>
-            Actualizar Sección
-          </Button>
+          <div className={"flex flex-col md:flex-row gap-2"}>
+            <Button icon={<MdModeEditOutline/>} onClick={handleUpdateSection} width={"full"} variant={"success"}>
+              Actualizar sección
+            </Button>
+            <Button icon={<FaTrash/>} onClick={handleDeleteSection} width={"auto"} variant={"danger"} truncate>
+              Eliminar sección
+            </Button>
+          </div>
         ) : (
           <Button icon={<FaPlus/>} onClick={handleCreateSection} width={"full"} variant={"success"}>
             Crear Sección

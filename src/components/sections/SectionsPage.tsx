@@ -13,7 +13,7 @@ const SectionsPage = () => {
       <Text as="h1" size="3xl">Secciones</Text>
       <Button icon={<FaPlus />} onClick={() => navigate("/create-section")} variant="success" >Agregar Sección</Button>
       </div>
-      <SectionsByParent />
+      <SectionsByParent showDeleteButton={true} />
     </div>
   );
 };

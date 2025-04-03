@@ -1,4 +1,4 @@
-import { collection, doc, getFirestore, onSnapshot, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, getFirestore, onSnapshot, setDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { app } from '../config/firebase.config';
 import { ISection } from '../interfaces/Section';
 
@@ -6,6 +6,16 @@ const db = getFirestore(app);
 
 // Colecciones en Firestore
 const sectionsCollection = collection(db, 'sections');
+
+/**
+ * Elimina una sección en la base de datos.
+ * Usa us id como identificador para eliminar una sección de la base de datos.
+ * @param sectionId - El ID de la sección a eliminar.
+ */
+export async function deleteSection(sectionId: string): Promise<void> {
+  const sectionRef = doc(db, 'sections', sectionId);
+  await deleteDoc(sectionRef);
+}
 
 /**
  * Crea una nueva sección en la base de datos.

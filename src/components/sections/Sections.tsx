@@ -3,6 +3,7 @@ import { ISection } from "../../interfaces/Section";
 import Text from "../microComponents/Text.tsx";
 import Spinner from "../Spinner.tsx";
 import SectionsList from "./sectionList/SectionsList.tsx";
+import { useDeleteSection } from "../../hooks/sections/useDeleteSection.ts";
 
 interface Props {
   handleClick: (section: ISection) => void;
@@ -10,6 +11,7 @@ interface Props {
 
 function Sections({ handleClick }: Props) {
   const { isFetching, sections } = useGetSections()
+  const { handleDelete } = useDeleteSection()
 
   return (
     <div className="max-w-7xl mx-auto p-4">
@@ -17,7 +19,7 @@ function Sections({ handleClick }: Props) {
       {
         isFetching
           ? <Spinner />
-          : <SectionsList sections={sections} handleClick={handleClick} />
+          : <SectionsList sections={sections} handleClick={handleClick} onDelete={handleDelete}  />
       }
     </div>
 
