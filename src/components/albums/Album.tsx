@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IAlbum } from "../../interfaces/Album";
 import { listenAlbum } from "../../service/album.service";
 import Text from "../microComponents/Text";
 import Spinner from "../Spinner.tsx";
 import { useAlbum } from "../../hooks/albums/useAlbum.ts";
 import Button from "../microComponents/Button.tsx";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaTrash } from "react-icons/fa";
 import { MdModeEditOutline } from "react-icons/md";
 import AlbumImagesList from "./albumImages/AlbumImagesList.tsx";
+import { useDeleteAlbum } from "../../hooks/albums/useDeleteAlbum.ts";
 
 const Album: React.FC = () => {
   const [isFetching, setIsFetching] = useState(false);
   const { albumId: albumParamId } = useParams();
   const { handleUpdateTitle, handleCreateAlbum, handleOnImageInputChange } = useAlbum();
+  const { handleDelete } = useDeleteAlbum();
+  const navigate = useNavigate();
 
   const [album, setAlbum] = useState<IAlbum | null>(null);
 
@@ -33,11 +36,11 @@ const Album: React.FC = () => {
   };
 
   useEffect(() => {
-    if(!albumParamId) return
+    if (!albumParamId) return;
 
-    setIsFetching(true)
-    const unsubscribe = listenAlbum(albumParamId??"", (album) => setAlbum(album));
-    setIsFetching(false)
+    setIsFetching(true);
+    const unsubscribe = listenAlbum(albumParamId ?? "", (album) => setAlbum(album));
+    setIsFetching(false);
 
     return () => unsubscribe();
   }, [albumParamId]);
@@ -50,6 +53,10 @@ const Album: React.FC = () => {
 
     setValues(album);
   }, [album]);
+
+  const handleDeleteAlbum = async () => {
+    if (await handleDelete(albumId)) navigate("/albums");
+  };
 
   if (isFetching) return <Spinner/>;
   return (
@@ -69,20 +76,25 @@ const Album: React.FC = () => {
       {
         album && album.id
           ? (
-            <Button
-              variant={"success"}
-              onClick={() => handleUpdateTitle(albumId, albumName)}
-              icon={<MdModeEditOutline />}
-              width={"full"}
-            >
-              Actualizar album
-            </Button>
+            <div className={"flex flex-col md:flex-row gap-2"}>
+              <Button
+                variant={"success"}
+                onClick={() => handleUpdateTitle(albumId, albumName)}
+                icon={<MdModeEditOutline/>}
+                width={"full"}
+              >
+                Actualizar album
+              </Button>
+              <Button icon={<FaTrash/>} onClick={handleDeleteAlbum} width={"auto"} variant={"danger"} truncate>
+                Eliminar sección
+              </Button>
+            </div>
           )
           : (
             <Button
               variant={"success"}
               onClick={() => handleCreateAlbum(albumName)}
-              icon={<FaPlus />}
+              icon={<FaPlus/>}
               width={"full"}
             >
               Crear album

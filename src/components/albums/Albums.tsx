@@ -7,6 +7,7 @@ import Text from "../microComponents/Text";
 import Button from "../microComponents/Button";
 import { useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
+import { useDeleteAlbum } from "../../hooks/albums/useDeleteAlbum.ts";
 
 interface Props {
   handleClick: (album: IAlbum) => void;
@@ -17,6 +18,7 @@ function Albums({ handleClick }: Props) {
   const [isFetching, setIsFetching] = useState(false)
 
   const navigate = useNavigate()
+  const { handleDelete } = useDeleteAlbum()
 
   const handleFetchSections = async () => {
     setIsFetching(true)
@@ -40,7 +42,7 @@ function Albums({ handleClick }: Props) {
       {
         isFetching
           ? <Spinner />
-          : <AlbumsList albums={albums} handleClick={handleClick} />
+          : <AlbumsList albums={albums} handleClick={handleClick} handleDelete={handleDelete} />
       }
     </div>
   )

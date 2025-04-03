@@ -151,12 +151,12 @@ const Section = () => {
     }
   };
 
-  if (isFetching) {
-    return <Spinner/>;
-  }
-
   async function handleDeleteSection() {
     if(await handleDelete(sectionId)) navigate("/sections")
+  }
+
+  if (isFetching) {
+    return <Spinner/>;
   }
 
   return (

@@ -1,7 +1,7 @@
 import {
   arrayRemove,
   arrayUnion,
-  collection,
+  collection, deleteDoc,
   doc,
   getDocs,
   getFirestore, onSnapshot,
@@ -17,6 +17,37 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 
 const albumsCollection = collection(db, 'albums');
+
+/**
+ * Elimina un album en la base de datos.
+ * Usa su id como identificador para eliminar un album de la base de datos.
+ * @param albumId - El ID del album a eliminar.
+ */
+export async function deleteAlbum(albumId: string): Promise<void> {
+  const albumRef = doc(db, 'albums', albumId);
+  await deleteDoc(albumRef);
+}
+
+/**
+ * Obtiene todas las secciones que hacen referencia a un álbum específico.
+ * @param albumId - El ID del álbum a buscar en las secciones.
+ * @returns Arreglo de secciones relacionadas con el álbum.
+ */
+export async function getSectionsByAlbumId(albumId: string): Promise<any[]> {
+  const db = getFirestore(app);
+  const sectionsCollection = collection(db, 'sections');
+  const querySnapshot = await getDocs(sectionsCollection);
+
+  const sectionsReferencingAlbum: any[] = [];
+  querySnapshot.forEach(doc => {
+    const data = doc.data();
+    if (data.albumId === albumId) {
+      sectionsReferencingAlbum.push({ id: doc.id, ...data });
+    }
+  });
+
+  return sectionsReferencingAlbum;
+}
 
 /**
  * Extrae la ruta de almacenamiento del Firebase Storage a partir de la URL de descarga.
